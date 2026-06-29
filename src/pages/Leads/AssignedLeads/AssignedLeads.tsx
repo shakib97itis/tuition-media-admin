@@ -7,8 +7,8 @@ import type { ColumnsType } from "antd/es/table";
 import type { TLead } from "../../../types/lead.types";
 import Paragraph from "antd/es/typography/Paragraph";
 import { BsThreeDots } from "react-icons/bs";
-import UpdateLeadModal from "../../../components/ui/modal/UpdateLeadModal";
 import moment from "moment";
+import ViewLeadDetailsModal from "../../../components/ui/modal/ViewLeadDetailsModal";
 
 const AssignedLeads = () => {
   const [page, setPage] = useState(1);
@@ -34,7 +34,7 @@ const AssignedLeads = () => {
       },
     },
     {
-      width: 100,
+      width: 50,
       align: "center",
       title: "Name",
       dataIndex: "name",
@@ -67,7 +67,7 @@ const AssignedLeads = () => {
       ),
     },
     {
-      width: 150,
+      width: 200,
       align: "center",
       title: "Details",
       dataIndex: "details",
@@ -79,9 +79,21 @@ const AssignedLeads = () => {
       ),
     },
     {
+      width: 150,
+      align: "center",
+      title: "Assigned To",
+      dataIndex: "assignedTo",
+      key: "assignedTo",
+      render: (assignedTo) => (
+        <p className="font-medium text-sm leading-5 text-[#151515]">
+          {assignedTo?.full_name || "N/A"}
+        </p>
+      ),
+    },
+    {
       width: 160,
       align: "center",
-      title: "Generated At",
+      title: "Created Date",
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => (
@@ -101,7 +113,7 @@ const AssignedLeads = () => {
         const items = [
           {
             key: "1",
-            label: <UpdateLeadModal record={record} />,
+            label: <ViewLeadDetailsModal record={record} />,
           },
         ];
         return (

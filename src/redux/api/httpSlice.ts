@@ -20,3 +20,10 @@ export const jobApiSlice = createApi({
   tagTypes: ["NewJobs", "RunningJobs"],
   endpoints: () => ({}),
 });
+
+export const adminUsersApiSlice = createApi({
+  reducerPath: "adminApi",
+  baseQuery: baseQueryWithRefreshToken,
+  tagTypes: ["AdminUsers"],
+  endpoints: () => ({}),
+});

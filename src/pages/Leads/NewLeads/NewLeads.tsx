@@ -8,21 +8,21 @@ import type { ColumnsType } from "antd/es/table";
 import type { TLead } from "../../../types/lead.types";
 import Paragraph from "antd/es/typography/Paragraph";
 import { BsThreeDots } from "react-icons/bs";
-import UpdateLeadModal from "../../../components/ui/modal/UpdateLeadModal";
 import moment from "moment";
-import CreateJobModal from "../../../components/ui/modal/CreateJobModal";
+import ViewLeadDetailsModal from "../../../components/ui/modal/ViewLeadDetailsModal";
+import UpdateLeadModal from "../../../components/ui/modal/UpdateLeadModal";
 
 const NewLeads = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [timeframe, setTimeframe] = useState<string | undefined>(undefined);
   const [limit, setLimit] = useState(30);
+
   const { data, isLoading, isFetching } = useGetNewLeadsQuery({
     search,
     page,
     limit,
   });
-  console.log(timeframe);
 
   const columns: ColumnsType<TLead> = [
     {
@@ -56,12 +56,32 @@ const NewLeads = () => {
     },
     {
       align: "center",
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      render: (text) => <Paragraph>{text}</Paragraph>,
+    },
+    {
+      align: "center",
       title: "Details",
       dataIndex: "details",
       key: "details",
       render: (text) => (
         <p className="font-medium text-sm leading-5 text-[#151515] capitalize">
           {text}
+        </p>
+      ),
+    },
+    {
+      align: "center",
+      title: "Last Followup Message",
+      dataIndex: "followUps",
+      key: "followUps",
+      render: (followUps) => (
+        <p className="font-medium text-sm leading-5 text-[#151515] capitalize">
+          {followUps?.length > 0
+            ? followUps[followUps?.length - 1]?.note
+            : "No followup yet"}
         </p>
       ),
     },
@@ -87,11 +107,11 @@ const NewLeads = () => {
         const items = [
           {
             key: "1",
-            label: <UpdateLeadModal record={record} />,
+            label: <ViewLeadDetailsModal record={record} />,
           },
           {
             key: "2",
-            label: <CreateJobModal lead={record?._id} />,
+            label: <UpdateLeadModal record={record} />,
           },
         ];
         return (

@@ -11,3 +11,5 @@ export type TAdmin = {
   allowed_ip?: string[];
   last_login?: Date;
 };
+
+export type TAllAdmins = [TAdmin];

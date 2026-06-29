@@ -13,8 +13,19 @@ const UpdateLeadModal = ({ record }: any) => {
   const [update, { data, isLoading, isSuccess, isError, error }] =
     useUpdateLeadMutation();
   const onFinish = (values: any) => {
+    // todo: if there is followup field. then we have to create a new followup. then add the id to the value.
+
+    if (values.newFollowUpNote) {
+      delete values.newFollowUpNote;
+    }
+
+    if (values.assignedTo) {
+      values.status = "assigned";
+    }
+
     update({ id: record?._id, body: values });
   };
+
   useEffect(() => {
     if (isSuccess) {
       Swal.fire({
@@ -36,6 +47,7 @@ const UpdateLeadModal = ({ record }: any) => {
       });
     }
   }, [data, isSuccess, isError, form, error]);
+
   return (
     <>
       <Button
@@ -43,7 +55,8 @@ const UpdateLeadModal = ({ record }: any) => {
         onClick={() => setModalOpen(true)}
         className="w-full flex gap-1 justify-center items-center"
       >
-        <CiEdit className="size-5 text-white" /> Update
+        <CiEdit className="size-5 text-white" />
+        Update
       </Button>
       <Modal
         width={800}
