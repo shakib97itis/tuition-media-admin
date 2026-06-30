@@ -120,7 +120,7 @@ const AssignLeadModal = ({ record }: { record: any }) => {
         centered
         open={open}
         onCancel={onCancel}
-        destroyOnClose
+        destroyOnHidden
       >
         <div className="my-5">
           <Spin spinning={isAdminsLoading}>
@@ -129,7 +129,6 @@ const AssignLeadModal = ({ record }: { record: any }) => {
                 Failed to load administrators.
               </p>
             ) : (
-              // <CreateLeadForm   {/* Replaced visually with your target configuration */}
               <AssignLeadForm
                 form={form}
                 loading={isLoading}

@@ -4,6 +4,14 @@ import { leadApiSlice } from "../../api/httpSlice";
 
 const leadApi = leadApiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    getAllLeads: builder.query<IncomingQueryType<TLead>, any>({
+      query: (params) => ({
+        url: "/leads/all",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["AllLeads"],
+    }),
     getNewLeads: builder.query<IncomingQueryType<TLead>, any>({
       query: (params) => ({
         url: "/leads/new",
@@ -49,7 +57,12 @@ const leadApi = leadApiSlice.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["NewLeads", "AssignedLeads", "AssignedOwnLeads"],
+      invalidatesTags: [
+        "AllLeads",
+        "NewLeads",
+        "AssignedLeads",
+        "AssignedOwnLeads",
+      ],
     }),
     updateLead: builder.mutation({
       query: ({ id, body }) => ({
@@ -57,7 +70,12 @@ const leadApi = leadApiSlice.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["NewLeads", "AssignedLeads", "AssignedOwnLeads"],
+      invalidatesTags: [
+        "AllLeads",
+        "NewLeads",
+        "AssignedLeads",
+        "AssignedOwnLeads",
+      ],
     }),
   }),
 });
@@ -70,4 +88,5 @@ export const {
   useLeadAssignMutation,
   useUpdateLeadMutation,
   useGetDirectLeadsQuery,
+  useGetAllLeadsQuery,
 } = leadApi;

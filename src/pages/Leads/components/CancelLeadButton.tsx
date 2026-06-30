@@ -22,7 +22,6 @@ export default function CancelLeadButton({ record }: { record: any }) {
       confirmButtonText: "Yes, cancel it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Match standard { id, body/data } API wrapper expectations
         updateLead({ id: leadId, body: { status: "canceled" } });
       }
     });
@@ -53,7 +52,7 @@ export default function CancelLeadButton({ record }: { record: any }) {
   return (
     <Button
       type="primary"
-      danger // Automatically styles button elements with danger palettes to signal cancellations
+      danger
       loading={isLoading}
       onClick={handleCancelLead}
       className="w-full flex gap-1 justify-center items-center"

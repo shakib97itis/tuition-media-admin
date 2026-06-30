@@ -10,7 +10,6 @@ export default function BlockLeadButton({ record }: { record: any }) {
   const [updateLead, { data, isLoading, isSuccess, isError, error }] =
     useUpdateLeadMutation();
 
-  // Prompt safety dialogue confirmation before actual data adjustments
   const handleBlockLead = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -22,13 +21,11 @@ export default function BlockLeadButton({ record }: { record: any }) {
       confirmButtonText: "Yes, block it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Sends status: "blocked" to match your Lead schema configuration requirements
         updateLead({ id: leadId, body: { status: "blocked" } });
       }
     });
   };
 
-  // Synchronize dynamic application outcome feedback directly
   useEffect(() => {
     if (isSuccess) {
       Swal.fire({
@@ -53,7 +50,7 @@ export default function BlockLeadButton({ record }: { record: any }) {
   return (
     <Button
       type="primary"
-      danger // Styles the button component with danger aesthetics to represent blocking actions
+      danger
       loading={isLoading}
       onClick={handleBlockLead}
       className="w-full flex gap-1 justify-center items-center"

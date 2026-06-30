@@ -17,19 +17,14 @@ const UpdateLeadModal = ({ record }: any) => {
   const currentUser = useSelector(selectCurrentUser);
 
   const onFinish = (values: any) => {
-    // Prepare the data
-    let body;
-    if (values.newFollowUpNote) {
-      body = {
-        ...values,
-        followUps: [
-          ...record.followUps,
-          { note: values.newFollowUpNote, doneBy: currentUser?._id },
-        ],
+    const { newFollowUpNote, ...leadFields } = values;
+    const body: any = { ...leadFields };
+    if (newFollowUpNote && newFollowUpNote.trim() !== "") {
+      body.newFollowUp = {
+        note: newFollowUpNote.trim(),
+        doneBy: currentUser?._id,
       };
     }
-    delete body.newFollowUpNote;
-
     updateLead({ id: record?._id, body });
   };
 
@@ -73,6 +68,7 @@ const UpdateLeadModal = ({ record }: any) => {
         centered
         open={open}
         onCancel={() => setModalOpen(false)}
+        destroyOnHidden={true}
       >
         <div className="my-5">
           <UpdateLeadForm

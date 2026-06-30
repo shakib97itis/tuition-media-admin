@@ -1,30 +1,29 @@
 import { useState } from "react";
-import { useGetNewLeadsQuery } from "../../../redux/features/lead/leadApi";
+import { useGetAllLeadsQuery } from "../../../redux/features/lead/leadApi";
 import DataTable from "../../../components/common/DataTable";
 import DataPagination from "../../../components/common/DataPagination";
-import { Dropdown, Input, Select } from "antd";
+import { Dropdown, Input, Select, Typography } from "antd";
 import CreateLeadModal from "../../../components/ui/modal/CreateLeadModal";
 import type { ColumnsType } from "antd/es/table";
 import type { TLead } from "../../../types/lead.types";
 import Paragraph from "antd/es/typography/Paragraph";
 import { BsThreeDots } from "react-icons/bs";
 import moment from "moment";
-import UpdateLeadModal from "../../../components/ui/modal/UpdateLeadModal";
-import AssignLeadModal from "../../../components/ui/modal/AssignLeadModal";
-import CancelLeadButton from "../components/CancelLeadButton";
 import ViewLeadDetailsModal from "../../../components/ui/modal/ViewLeadDetailsModal";
-import BlockLeadButton from "../components/BlockLeadButton";
 
 const AllLeads = () => {
+  const { Text } = Typography;
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [_, setTimeframe] = useState<string | undefined>(undefined);
   const [limit, setLimit] = useState(30);
+  const [status, setStatus] = useState<string | undefined>(undefined);
 
-  const { data, isLoading, isFetching } = useGetNewLeadsQuery({
+  const { data, isLoading, isFetching } = useGetAllLeadsQuery({
     search,
     page,
     limit,
+    status: status || undefined,
   });
 
   const columns: ColumnsType<TLead> = [
@@ -39,12 +38,24 @@ const AllLeads = () => {
     },
     {
       align: "center",
-      title: "Generated At",
+      title: "Created Date",
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => (
         <p className="font-medium text-sm leading-5 text-[#151515]">
           {moment(text).format("DD MMM YYYY")}
+        </p>
+      ),
+    },
+    {
+      width: 150,
+      align: "center",
+      title: "Assigned To",
+      dataIndex: "assignedTo",
+      key: "assignedTo",
+      render: (assignedTo) => (
+        <p className="font-medium text-sm leading-5 text-[#151515]">
+          {assignedTo?.full_name || "N/A"}
         </p>
       ),
     },
@@ -123,22 +134,6 @@ const AllLeads = () => {
             key: "1",
             label: <ViewLeadDetailsModal record={record} />,
           },
-          {
-            key: "2",
-            label: <UpdateLeadModal record={record} />,
-          },
-          {
-            key: "3",
-            label: <AssignLeadModal record={record} />,
-          },
-          {
-            key: "4",
-            label: <CancelLeadButton record={record} />,
-          },
-          {
-            key: "5",
-            label: <BlockLeadButton record={record} />,
-          },
         ];
         return (
           <Dropdown menu={{ items }}>
@@ -167,7 +162,7 @@ const AllLeads = () => {
       <div className="flex justify-between items-end">
         <div className="space-y-1">
           <h2 className="font-bold text-[28px] leading-9 text-[#111827]">
-            All Leads (Need the api)
+            All Leads
           </h2>
           <p className="text-[#838383] font-semibold text-lg">
             {data?.total || 0} leads available
@@ -176,14 +171,34 @@ const AllLeads = () => {
         <CreateLeadModal />
       </div>
       <div className="sticky -top-5 z-10 bg-white py-2">
-        <div className="grid grid-cols-9 gap-2 items-center">
-          <Input.Search
-            onSearch={onSearch}
-            allowClear
-            placeholder="Search leads"
-            className="text-sm col-span-7 font-medium text-[#5D5D5D]"
-          />
-          <div className="col-span-2 flex gap-2">
+        <div className="grid grid-cols-12 gap-2 items-center">
+          <div className="col-span-6 flex flex-col gap-1.5">
+            <Text className="text-sm font-medium">Search</Text>
+            <Input.Search
+              onSearch={onSearch}
+              allowClear
+              placeholder="Search leads"
+              className="text-sm font-medium text-[#5D5D5D]"
+            />
+          </div>
+          <div className="col-span-3 flex flex-col gap-1.5">
+            <Text className="text-sm font-medium">Filter by Status</Text>
+            <Select
+              className="w-full"
+              placeholder="Filter by status"
+              onChange={(value) => setStatus(value)}
+              options={[
+                { label: "All", value: "" },
+                { label: "New", value: "new" },
+                { label: "Assigned", value: "assigned" },
+                { label: "Interested", value: "interested" },
+                { label: "Converted", value: "converted" },
+                { label: "Blocked", value: "blocked" },
+              ]}
+            />
+          </div>
+          <div className="col-span-3 flex flex-col gap-1.5">
+            <Text className="text-sm font-medium">Filter by Time</Text>
             <Select
               className="w-full"
               defaultValue={"all"}

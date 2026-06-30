@@ -10,7 +10,7 @@ export const authApiSlice = createApi({
 export const leadApiSlice = createApi({
   reducerPath: "leadApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["NewLeads", "AssignedLeads", "AssignedOwnLeads"],
+  tagTypes: ["AllLeads", "NewLeads", "AssignedLeads", "AssignedOwnLeads"],
   endpoints: () => ({}),
 });
 
