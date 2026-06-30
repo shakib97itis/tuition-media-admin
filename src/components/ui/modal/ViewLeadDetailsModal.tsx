@@ -11,26 +11,12 @@ export default function ViewLeadDetailsModal({ record }: any) {
     name,
     contact,
     details,
-    status,
+    lead_source,
     createdAt,
     updatedAt,
     followUps,
     assignedTo,
   } = record || {};
-
-  // Helper function to color-code the status tag
-  const getStatusColor = (statusName: string) => {
-    switch (statusName?.toLowerCase()) {
-      case "new":
-        return "blue";
-      case "active":
-        return "green";
-      case "pending":
-        return "orange";
-      default:
-        return "default";
-    }
-  };
 
   return (
     <>
@@ -40,7 +26,7 @@ export default function ViewLeadDetailsModal({ record }: any) {
         className="w-full flex gap-1 justify-center items-center"
       >
         <CiEdit className="size-5 text-white" />
-        View Details
+        View Lead Details
       </Button>
       <Modal
         width={800}
@@ -53,19 +39,20 @@ export default function ViewLeadDetailsModal({ record }: any) {
         <div className="my-5 flex flex-col gap-6">
           {/* Main Lead Details Section */}
           <Descriptions bordered column={2} layout="horizontal">
-            <Descriptions.Item label="Name" span={2}>
+            <Descriptions.Item label="Name" span={1}>
               <span className="font-semibold">{name}</span>
             </Descriptions.Item>
-            <Descriptions.Item label="Assign to" span={2}>
-              <span className="font-semibold">
-                {assignedTo?.full_name || "N/A"}
-              </span>
+
+            <Descriptions.Item label="Lead Source" span={1}>
+              <span className="font-semibold">{lead_source}</span>
             </Descriptions.Item>
 
             <Descriptions.Item label="Contact">{contact}</Descriptions.Item>
 
-            <Descriptions.Item label="Status">
-              <Tag color={getStatusColor(status)}>{status?.toUpperCase()}</Tag>
+            <Descriptions.Item label="Assign to">
+              <span className="font-semibold">
+                {assignedTo?.full_name || "N/A"}
+              </span>
             </Descriptions.Item>
 
             <Descriptions.Item label="Details" span={2}>
@@ -90,15 +77,14 @@ export default function ViewLeadDetailsModal({ record }: any) {
             {followUps && followUps.length > 0 ? (
               <Timeline
                 className="mt-4"
+                reverse={true}
                 items={followUps.map((history: any, index: number) => ({
                   color: "blue",
                   children: (
                     <div key={index} className="flex flex-col gap-1">
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-gray-400">
-                          {history.date
-                            ? moment(history.date).format("ddd, MMM Do YYYY")
-                            : "N/A"}
+                          {moment(history.createdAt).format("ddd, MMM Do YYYY")}
                         </span>
                         {history.doneBy && (
                           <Tag
@@ -107,7 +93,7 @@ export default function ViewLeadDetailsModal({ record }: any) {
                           >
                             By:{" "}
                             {typeof history.doneBy === "object"
-                              ? history.doneBy.name || history.doneBy._id
+                              ? history.doneBy.full_name
                               : history.doneBy}
                           </Tag>
                         )}

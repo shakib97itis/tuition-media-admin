@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  useGetAssignedLeadsQuery,
-  useGetAssignedOwnLeadsQuery,
-} from "../../../redux/features/lead/leadApi";
+import { useGetAssignedOwnLeadsQuery } from "../../../redux/features/lead/leadApi";
 import DataTable from "../../../components/common/DataTable";
 import DataPagination from "../../../components/common/DataPagination";
 import { Dropdown, Input, Select } from "antd";
@@ -16,6 +13,8 @@ import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
 import { useSelector } from "react-redux";
 import UpdateLeadModal from "../../../components/ui/modal/UpdateLeadModal";
 import CreateJobModal from "../../../components/ui/modal/CreateJobModal";
+import CancelLeadButton from "../components/CancelLeadButton";
+import BlockLeadButton from "../components/BlockLeadButton";
 
 const OwnAssignedLeads = () => {
   const [page, setPage] = useState(1);
@@ -45,7 +44,19 @@ const OwnAssignedLeads = () => {
       },
     },
     {
-      width: 50,
+      width: 160,
+      align: "center",
+      title: "Generated At",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text) => (
+        <p className="font-medium text-sm leading-5 text-[#151515]">
+          {moment(text).format("ddd, MMM Do YYYY")}
+        </p>
+      ),
+    },
+    {
+      // width: 50,
       align: "center",
       title: "Name",
       dataIndex: "name",
@@ -57,7 +68,7 @@ const OwnAssignedLeads = () => {
       ),
     },
     {
-      width: 100,
+      // width: 100,
       align: "center",
       title: "Contact",
       dataIndex: "contact",
@@ -78,7 +89,7 @@ const OwnAssignedLeads = () => {
       ),
     },
     {
-      width: 200,
+      // width: 200,
       align: "center",
       title: "Details",
       dataIndex: "details",
@@ -90,26 +101,27 @@ const OwnAssignedLeads = () => {
       ),
     },
     {
-      width: 150,
       align: "center",
-      title: "Assigned To",
-      dataIndex: "assignedTo",
-      key: "assignedTo",
-      render: (assignedTo) => (
-        <p className="font-medium text-sm leading-5 text-[#151515]">
-          {assignedTo?.full_name || "N/A"}
+      title: "Last follow up note",
+      dataIndex: "followUps",
+      key: "followUps",
+      render: (followUps) => (
+        <p className="font-medium text-sm leading-5 text-[#151515] capitalize">
+          {followUps?.length > 0
+            ? `${followUps[followUps?.length - 1]?.note} - ${moment(followUps[followUps?.length - 1]?.createdAt).format("DD MMM YYYY")}`
+            : "No followup note yet"}
         </p>
       ),
     },
     {
-      width: 160,
+      // width: 200,
       align: "center",
-      title: "Created Date",
-      dataIndex: "createdAt",
-      key: "createdAt",
+      title: "Lead Source",
+      dataIndex: "details",
+      key: "details",
       render: (text) => (
-        <p className="font-medium text-sm leading-5 text-[#151515]">
-          {moment(text).format("ddd, MMM Do YYYY")}
+        <p className="font-medium text-sm leading-5 text-[#151515] capitalize">
+          {text}
         </p>
       ),
     },
@@ -133,6 +145,14 @@ const OwnAssignedLeads = () => {
           {
             key: "3",
             label: <CreateJobModal lead={record._id} />,
+          },
+          {
+            key: "4",
+            label: <CancelLeadButton record={record} />,
+          },
+          {
+            key: "5",
+            label: <BlockLeadButton record={record} />,
           },
         ];
         return (

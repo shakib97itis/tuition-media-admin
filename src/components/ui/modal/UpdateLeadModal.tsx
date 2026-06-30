@@ -4,26 +4,33 @@ import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import { CiEdit } from "react-icons/ci";
-import LeadForm from "../form/LeadForm";
+import UpdateLeadForm from "../form/UpdateLeadForm";
 import { useUpdateLeadMutation } from "../../../redux/features/lead/leadApi";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
 
 const UpdateLeadModal = ({ record }: any) => {
   const [open, setModalOpen] = useState(false);
   const [form] = useForm();
-  const [update, { data, isLoading, isSuccess, isError, error }] =
+  const [updateLead, { data, isLoading, isSuccess, isError, error }] =
     useUpdateLeadMutation();
+  const currentUser = useSelector(selectCurrentUser);
+
   const onFinish = (values: any) => {
-    // todo: if there is followup field. then we have to create a new followup. then add the id to the value.
-
+    // Prepare the data
+    let body;
     if (values.newFollowUpNote) {
-      delete values.newFollowUpNote;
+      body = {
+        ...values,
+        followUps: [
+          ...record.followUps,
+          { note: values.newFollowUpNote, doneBy: currentUser?._id },
+        ],
+      };
     }
+    delete body.newFollowUpNote;
 
-    if (values.assignedTo) {
-      values.status = "assigned";
-    }
-
-    update({ id: record?._id, body: values });
+    updateLead({ id: record?._id, body });
   };
 
   useEffect(() => {
@@ -45,6 +52,7 @@ const UpdateLeadModal = ({ record }: any) => {
         text: `${(error as any)?.data?.message || "something went wrong"}`,
         confirmButtonColor: "#0ABAC3",
       });
+      setModalOpen(false);
     }
   }, [data, isSuccess, isError, form, error]);
 
@@ -56,7 +64,7 @@ const UpdateLeadModal = ({ record }: any) => {
         className="w-full flex gap-1 justify-center items-center"
       >
         <CiEdit className="size-5 text-white" />
-        Update
+        Update Lead
       </Button>
       <Modal
         width={800}
@@ -67,7 +75,7 @@ const UpdateLeadModal = ({ record }: any) => {
         onCancel={() => setModalOpen(false)}
       >
         <div className="my-5">
-          <LeadForm
+          <UpdateLeadForm
             record={record}
             form={form}
             loading={isLoading}

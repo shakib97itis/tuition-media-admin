@@ -5,6 +5,7 @@ export type TLead = {
   name: string;
   contact: string;
   details: string;
+  lead_source: string;
   assignedTo: TAdmin;
   referredBy?: TAdmin;
   status: string;

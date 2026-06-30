@@ -1,25 +1,29 @@
 import { lazy } from "react";
 import LazyLoad from "../components/common/LozyLoad";
 
+const Dashboard = LazyLoad(lazy(() => import("../pages/Dashboard/Dashboard")));
+
 const DirectLeads = LazyLoad(
   lazy(() => import("../pages/Leads/DirectLeads/DirectLeads")),
-);
-const Jobs = LazyLoad(lazy(() => import("../pages/Jobs/Jobs")));
-const RunningJobs = LazyLoad(
-  lazy(() => import("../pages/RunningJobs/RunningJobs")),
 );
 
 const NewLeads = LazyLoad(
   lazy(() => import("../pages/Leads/NewLeads/NewLeads")),
 );
+
 const AssignedLeads = LazyLoad(
   lazy(() => import("../pages/Leads/AssignedLeads/AssignedLeads")),
 );
-// const ConvertedLeads = LazyLoad(
-//   lazy(() => import("../pages/Leads/ConvertedLeads/ConvertedLeads")),
-// );
-const Dashboard = LazyLoad(lazy(() => import("../pages/Dashboard/Dashboard")));
-const Profile = LazyLoad(lazy(() => import("../pages/Profile/Profile")));
+
+const AllLeads = LazyLoad(
+  lazy(() => import("../pages/Leads/AllLeads/AllLeads")),
+);
+
+const Jobs = LazyLoad(lazy(() => import("../pages/Jobs/Jobs")));
+
+const RunningJobs = LazyLoad(
+  lazy(() => import("../pages/RunningJobs/RunningJobs")),
+);
 
 const OwnAssignedLeads = LazyLoad(
   lazy(() => import("../pages/Leads/OwnAssignedLeads/OwnAssignedLeads")),
@@ -30,10 +34,6 @@ export const superAdminPaths = [
     name: "Dashboard",
     path: "dashboard",
     element: <Dashboard />,
-  },
-  {
-    path: "profile",
-    element: <Profile />,
   },
   {
     name: "Leads",
@@ -49,7 +49,7 @@ export const superAdminPaths = [
         element: <NewLeads />,
       },
       {
-        name: "My Leads",
+        name: "My Assigned Leads",
         path: "my-leads",
         element: <OwnAssignedLeads />,
       },
@@ -58,11 +58,11 @@ export const superAdminPaths = [
         path: "assigned-leads",
         element: <AssignedLeads />,
       },
-      // {
-      //   name: "Converted Leads",
-      //   path: "converted-leads",
-      //   element: <ConvertedLeads />,
-      // },
+      {
+        name: "All Leads",
+        path: "all-leads",
+        element: <AllLeads />,
+      },
     ],
   },
   {

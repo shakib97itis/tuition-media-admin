@@ -9,6 +9,7 @@ import Paragraph from "antd/es/typography/Paragraph";
 import { BsThreeDots } from "react-icons/bs";
 import moment from "moment";
 import ViewLeadDetailsModal from "../../../components/ui/modal/ViewLeadDetailsModal";
+import AssignLeadModal from "../../../components/ui/modal/AssignLeadModal";
 
 const AssignedLeads = () => {
   const [page, setPage] = useState(1);
@@ -32,6 +33,30 @@ const AssignedLeads = () => {
       render: (_, _record, index) => {
         return <>{page * limit + index + 1 - limit}</>;
       },
+    },
+    {
+      width: 160,
+      align: "center",
+      title: "Created Date",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text) => (
+        <p className="font-medium text-sm leading-5 text-[#151515]">
+          {moment(text).format("ddd, MMM Do YYYY")}
+        </p>
+      ),
+    },
+    {
+      width: 150,
+      align: "center",
+      title: "Assigned To",
+      dataIndex: "assignedTo",
+      key: "assignedTo",
+      render: (assignedTo) => (
+        <p className="font-medium text-sm leading-5 text-[#151515]">
+          {assignedTo?.full_name || "N/A"}
+        </p>
+      ),
     },
     {
       width: 50,
@@ -79,26 +104,16 @@ const AssignedLeads = () => {
       ),
     },
     {
-      width: 150,
+      width: 200,
       align: "center",
-      title: "Assigned To",
-      dataIndex: "assignedTo",
-      key: "assignedTo",
-      render: (assignedTo) => (
-        <p className="font-medium text-sm leading-5 text-[#151515]">
-          {assignedTo?.full_name || "N/A"}
-        </p>
-      ),
-    },
-    {
-      width: 160,
-      align: "center",
-      title: "Created Date",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (text) => (
-        <p className="font-medium text-sm leading-5 text-[#151515]">
-          {moment(text).format("ddd, MMM Do YYYY")}
+      title: "Last follow up note",
+      dataIndex: "followUps",
+      key: "followUps",
+      render: (followUps) => (
+        <p className="font-medium text-sm leading-5 text-[#151515] capitalize">
+          {followUps?.length > 0
+            ? `${followUps[followUps?.length - 1]?.note} - ${moment(followUps[followUps?.length - 1]?.createdAt).format("DD MMM YYYY")}`
+            : "No followup note yet"}
         </p>
       ),
     },
@@ -114,6 +129,10 @@ const AssignedLeads = () => {
           {
             key: "1",
             label: <ViewLeadDetailsModal record={record} />,
+          },
+          {
+            key: "2",
+            label: <AssignLeadModal record={record} />,
           },
         ];
         return (

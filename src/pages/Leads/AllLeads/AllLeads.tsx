@@ -15,7 +15,7 @@ import CancelLeadButton from "../components/CancelLeadButton";
 import ViewLeadDetailsModal from "../../../components/ui/modal/ViewLeadDetailsModal";
 import BlockLeadButton from "../components/BlockLeadButton";
 
-const NewLeads = () => {
+const AllLeads = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [_, setTimeframe] = useState<string | undefined>(undefined);
@@ -167,7 +167,7 @@ const NewLeads = () => {
       <div className="flex justify-between items-end">
         <div className="space-y-1">
           <h2 className="font-bold text-[28px] leading-9 text-[#111827]">
-            New Leads
+            All Leads (Need the api)
           </h2>
           <p className="text-[#838383] font-semibold text-lg">
             {data?.total || 0} leads available
@@ -225,4 +225,4 @@ const NewLeads = () => {
   );
 };
 
-export default NewLeads;
+export default AllLeads;

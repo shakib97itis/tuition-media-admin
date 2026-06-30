@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "antd/es/form/Form";
 import Swal from "sweetalert2";
 import { useCreateLeadMutation } from "../../../redux/features/lead/leadApi";
-import LeadForm from "../form/LeadForm";
+import CreateLeadForm from "../form/CreateLeadForm";
 
 const CreateLeadModal = () => {
   const [open, setModalOpen] = useState(false);
   const [form] = useForm();
-  const [create, { data, isLoading, isSuccess, isError, error }] =
+  const [createLead, { data, isLoading, isSuccess, isError, error }] =
     useCreateLeadMutation();
   const onFinish = (values: any) => {
-    create(values);
+    createLead(values);
   };
   useEffect(() => {
     if (isSuccess) {
@@ -54,7 +54,7 @@ const CreateLeadModal = () => {
         onCancel={onCancel}
       >
         <div className="my-5">
-          <LeadForm form={form} loading={isLoading} onFinish={onFinish} />
+          <CreateLeadForm form={form} loading={isLoading} onFinish={onFinish} />
         </div>
       </Modal>
     </>

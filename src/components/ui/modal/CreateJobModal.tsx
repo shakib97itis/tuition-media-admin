@@ -54,7 +54,7 @@ const CreateJobModal = ({ lead }: { lead: string }) => {
         onClick={() => setModalOpen(true)}
         className="w-full flex gap-1 justify-center items-center"
       >
-        <IoCreateOutline className="size-5 text-white" /> Create Job
+        <IoCreateOutline className="size-5 text-white" /> Convert Lead to Job
       </Button>
       <Modal
         width={900}
