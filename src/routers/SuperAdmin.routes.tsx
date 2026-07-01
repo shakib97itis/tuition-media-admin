@@ -1,44 +1,60 @@
 import { lazy } from "react";
 import LazyLoad from "../components/common/LozyLoad";
+import type { TPath } from "../types/path";
+import {
+  DashboardOutlined,
+  UsergroupAddOutlined,
+  ProjectOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
+// ============================================================================
+// 1. LAZY LOADING COMPONENTS (Organized by Feature Modules)
+// ============================================================================
+
+// Dashboard
 const Dashboard = LazyLoad(lazy(() => import("../pages/Dashboard/Dashboard")));
 
+// Leads Module
 const DirectLeads = LazyLoad(
   lazy(() => import("../pages/Leads/DirectLeads/DirectLeads")),
 );
-
 const NewLeads = LazyLoad(
   lazy(() => import("../pages/Leads/NewLeads/NewLeads")),
 );
-
+const OwnAssignedLeads = LazyLoad(
+  lazy(() => import("../pages/Leads/OwnAssignedLeads/OwnAssignedLeads")),
+);
 const AssignedLeads = LazyLoad(
   lazy(() => import("../pages/Leads/AssignedLeads/AssignedLeads")),
 );
-
 const AllLeads = LazyLoad(
   lazy(() => import("../pages/Leads/AllLeads/AllLeads")),
 );
 
+// Requirements / Jobs Module
 const Jobs = LazyLoad(lazy(() => import("../pages/Jobs/Jobs")));
-
 const RunningJobs = LazyLoad(
   lazy(() => import("../pages/RunningJobs/RunningJobs")),
 );
 
-const OwnAssignedLeads = LazyLoad(
-  lazy(() => import("../pages/Leads/OwnAssignedLeads/OwnAssignedLeads")),
-);
-
+// Teachers Module
 const AllTeachers = LazyLoad(lazy(() => import("../pages/Teacher/Teachers")));
 
-export const superAdminPaths = [
+// ============================================================================
+// 2. PATHS CONFIGURATION
+// ============================================================================
+
+export const superAdminPaths: TPath[] = [
   {
     name: "Dashboard",
     path: "dashboard",
+    icon: <DashboardOutlined />,
     element: <Dashboard />,
   },
   {
     name: "Leads",
+    icon: <UsergroupAddOutlined />,
     children: [
       {
         name: "Direct Leads",
@@ -69,6 +85,7 @@ export const superAdminPaths = [
   },
   {
     name: "Requirements",
+    icon: <ProjectOutlined />,
     children: [
       {
         name: "Requirements",
@@ -85,6 +102,7 @@ export const superAdminPaths = [
   {
     name: "Teachers",
     path: "teachers",
+    icon: <UserOutlined />,
     element: <AllTeachers />,
   },
 ];
