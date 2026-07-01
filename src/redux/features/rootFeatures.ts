@@ -7,6 +7,7 @@ import {
   authApiSlice,
   jobApiSlice,
   leadApiSlice,
+  teacherApiSlice,
 } from "../api/httpSlice";
 
 const persistConfig = {
@@ -21,6 +22,7 @@ export const rootReducers = combineReducers({
   [leadApiSlice.reducerPath]: leadApiSlice.reducer,
   [jobApiSlice.reducerPath]: jobApiSlice.reducer,
   [adminUsersApiSlice.reducerPath]: adminUsersApiSlice.reducer,
+  [teacherApiSlice.reducerPath]: teacherApiSlice.reducer,
   auth: persistedAuthReducer,
 });
 
@@ -29,4 +31,5 @@ export const rootMiddlewares = [
   leadApiSlice.middleware,
   jobApiSlice.middleware,
   adminUsersApiSlice.middleware,
+  teacherApiSlice.middleware,
 ];

@@ -29,6 +29,8 @@ const OwnAssignedLeads = LazyLoad(
   lazy(() => import("../pages/Leads/OwnAssignedLeads/OwnAssignedLeads")),
 );
 
+const AllTeachers = LazyLoad(lazy(() => import("../pages/Teacher/Teachers")));
+
 export const superAdminPaths = [
   {
     name: "Dashboard",
@@ -79,5 +81,10 @@ export const superAdminPaths = [
         element: <RunningJobs />,
       },
     ],
+  },
+  {
+    name: "Teachers",
+    path: "teachers",
+    element: <AllTeachers />,
   },
 ];

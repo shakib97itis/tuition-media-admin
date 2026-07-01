@@ -27,3 +27,10 @@ export const adminUsersApiSlice = createApi({
   tagTypes: ["AdminUsers"],
   endpoints: () => ({}),
 });
+
+export const teacherApiSlice = createApi({
+  reducerPath: "teacherApi",
+  baseQuery: baseQueryWithRefreshToken,
+  tagTypes: ["Teachers", "Teacher"],
+  endpoints: () => ({}),
+});
