@@ -1,8 +1,10 @@
+// * This component is currently not in use, Keeping this for future.
+
 import { Button, Modal } from "antd";
 import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
-import type { TTeacher } from "../../../types/teacher.types";
-import TeacherDetails from "../../../pages/Teacher/components/TeacherDetails";
+import type { TTeacher } from "../../../../types/teacher.types";
+import TeacherDetails from "./TeacherDetails";
 
 export default function ViewTeacherDetailsModal({
   record,

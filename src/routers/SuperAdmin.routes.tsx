@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import LazyLoad from "../components/common/LozyLoad";
+import LazyLoad from "../components/common/LazyLoad";
 import type { TPath } from "../types/path";
 import {
   DashboardOutlined,
@@ -39,7 +39,20 @@ const RunningJobs = LazyLoad(
 );
 
 // Teachers Module
-const AllTeachers = LazyLoad(lazy(() => import("../pages/Teacher/Teachers")));
+const AllTeachers = LazyLoad(
+  lazy(() => import("../pages/Teacher/AllTeachersProfile/AllTeachersProfile")),
+);
+
+const TeacherProfile = LazyLoad(
+  lazy(() => import("../pages/Teacher/TeacherProfile/TeacherProfile")),
+);
+
+const UpdateTeacherProfile = LazyLoad(
+  lazy(
+    () =>
+      import("../pages/Teacher/UpdateTeacherProfile.tsx/UpdateTeacherProfile"),
+  ),
+);
 
 // ============================================================================
 // 2. PATHS CONFIGURATION
@@ -100,9 +113,19 @@ export const superAdminPaths: TPath[] = [
     ],
   },
   {
-    name: "Teachers",
+    name: "All Teachers",
     path: "teachers",
     icon: <UserOutlined />,
     element: <AllTeachers />,
+  },
+  {
+    // Teacher Profile
+    path: "teacher/:teacherId",
+    element: <TeacherProfile />,
+  },
+  {
+    // Teacher Profile edit
+    path: "teacher/edit/:id",
+    element: <UpdateTeacherProfile />,
   },
 ];

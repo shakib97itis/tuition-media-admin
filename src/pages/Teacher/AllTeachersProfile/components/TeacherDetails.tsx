@@ -1,5 +1,7 @@
+// * This component is currently not in use, Keeping this for future.
+
 import { Tabs, Descriptions, Tag, Avatar, Image, Card, Space } from "antd";
-import type { TTeacher } from "../../../types/teacher.types";
+import type { TTeacher } from "../../../../types/teacher.types";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 
 export default function TeacherDetails({ teacher }: { teacher: TTeacher }) {
@@ -65,12 +67,12 @@ export default function TeacherDetails({ teacher }: { teacher: TTeacher }) {
         },
         {
           label: "Emergency Contact",
-          children: teacher.parents_info.emergency_contact_name,
+          children: teacher.parents_info.other_contact_name,
           span: 1,
         },
         {
           label: "Emergency Phone",
-          children: teacher.parents_info.emergency_contact_phone,
+          children: teacher.parents_info.other_contact_phone,
           span: 2,
         },
       ]
@@ -165,11 +167,12 @@ export default function TeacherDetails({ teacher }: { teacher: TTeacher }) {
             "College / Higher Secondary Education",
             teacher.education.college,
           )}
-          {renderEducationSection("Diploma Details", teacher.education.diploma)}
+
           {renderEducationSection(
             "Graduation / Undergrad Details",
             teacher.education.graduation,
           )}
+
           {renderEducationSection(
             "Post Graduation Details",
             teacher.education.post_graduation,
@@ -249,7 +252,7 @@ export default function TeacherDetails({ teacher }: { teacher: TTeacher }) {
               </Descriptions.Item>
               <Descriptions.Item label="Expected Salary Range">
                 <strong className="text-green-600">
-                  {pref.salary_range.min} - {pref.salary_range.max}
+                  {pref.salary_range?.min} - {pref.salary_range?.max}
                 </strong>
               </Descriptions.Item>
             </Descriptions>
@@ -296,10 +299,10 @@ export default function TeacherDetails({ teacher }: { teacher: TTeacher }) {
             <Descriptions.Item label="Profile Progress">
               <Tag
                 color={
-                  teacher.profile_completion.is_completed ? "green" : "warning"
+                  teacher.profile_completion?.is_completed ? "green" : "warning"
                 }
               >
-                {teacher.profile_completion.percentage}% Completed
+                {teacher.profile_completion?.percentage}% Completed
               </Tag>
             </Descriptions.Item>
             <Descriptions.Item label="Account Activity">
@@ -315,7 +318,7 @@ export default function TeacherDetails({ teacher }: { teacher: TTeacher }) {
             <div>
               <h3 className="text-base font-semibold mb-2">
                 Identification Documents (
-                {teacher.identification.type.toUpperCase()})
+                {teacher?.identification?.type?.toUpperCase()})
               </h3>
               <p className="mb-2 text-gray-600">
                 ID Number: <strong>{teacher.identification.number}</strong>

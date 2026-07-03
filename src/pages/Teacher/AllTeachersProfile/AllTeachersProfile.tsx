@@ -1,17 +1,18 @@
 import { useState, useMemo } from "react";
-import DataTable from "../../components/common/DataTable";
-import DataPagination from "../../components/common/DataPagination";
 import { Dropdown, Input, Select, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import type { TTeacher } from "../../types/teacher.types";
 import { BsThreeDots } from "react-icons/bs";
 import moment from "moment";
-import { useGetTeachersQuery } from "../../redux/features/teacher/teacherApi";
-import ViewTeacherDetailsModal from "../../components/ui/modal/ViewTeacherDetailsModal";
+
+import DataPagination from "../../../components/common/DataPagination";
+import DataTable from "../../../components/common/DataTable";
+import TeacherDetailsButton from "./components/TeacherDetailsButton";
+import { useGetTeachersQuery } from "../../../redux/features/teacher/teacherApi";
+import type { TTeacher } from "../../../types/teacher.types";
 
 const { Paragraph } = Typography;
 
-const AllTeachers = () => {
+const AllTeachersProfile = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [_, setTimeframe] = useState<string | undefined>(undefined);
@@ -98,7 +99,7 @@ const AllTeachers = () => {
           const items = [
             {
               key: "1",
-              label: <ViewTeacherDetailsModal record={record} />,
+              label: <TeacherDetailsButton teacherId={record._id} />,
             },
           ];
           return (
@@ -178,4 +179,4 @@ const AllTeachers = () => {
   );
 };
 
-export default AllTeachers;
+export default AllTeachersProfile;
