@@ -1,25 +1,27 @@
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
-import { useCreateJobMutation } from "../../../redux/features/job/jobApi";
+import { useCreateTuitionJobByAdminMutation } from "../../../redux/features/job/jobApi";
 import Swal from "sweetalert2";
 import { Button, Modal } from "antd";
 import JobForm from "../form/JobForm";
 import { IoCreateOutline } from "react-icons/io5";
 import { selectCurrentUser } from "../../../redux/features/auth/authSlice";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../../hooks/useAppHooks";
 
 const CreateJobModal = ({ lead }: { lead: string }) => {
   const [open, setModalOpen] = useState(false);
   const [form] = useForm();
-  const user = useSelector(selectCurrentUser);
+  const user = useAppSelector(selectCurrentUser);
+
   const [create, { data, isLoading, isSuccess, isError, error }] =
-    useCreateJobMutation();
+    useCreateTuitionJobByAdminMutation();
+
   const onFinish = (values: any) => {
-    console.log(values);
     values.lead_from = lead;
     values.posted_by = user?._id;
     create(values);
   };
+
   useEffect(() => {
     if (isSuccess) {
       Swal.fire({

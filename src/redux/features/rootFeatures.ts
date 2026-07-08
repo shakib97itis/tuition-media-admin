@@ -6,6 +6,7 @@ import {
   adminUsersApiSlice,
   authApiSlice,
   jobApiSlice,
+  jobApplicationApiSlice,
   leadApiSlice,
   teacherApiSlice,
 } from "../api/httpSlice";
@@ -23,6 +24,7 @@ export const rootReducers = combineReducers({
   [jobApiSlice.reducerPath]: jobApiSlice.reducer,
   [adminUsersApiSlice.reducerPath]: adminUsersApiSlice.reducer,
   [teacherApiSlice.reducerPath]: teacherApiSlice.reducer,
+  [jobApplicationApiSlice.reducerPath]: jobApplicationApiSlice.reducer,
   auth: persistedAuthReducer,
 });
 
@@ -32,4 +34,5 @@ export const rootMiddlewares = [
   jobApiSlice.middleware,
   adminUsersApiSlice.middleware,
   teacherApiSlice.middleware,
+  jobApplicationApiSlice.middleware,
 ];

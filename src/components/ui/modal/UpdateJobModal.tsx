@@ -4,16 +4,18 @@ import Swal from "sweetalert2";
 import { Button, Modal } from "antd";
 import { CiEdit } from "react-icons/ci";
 import JobForm from "../form/JobForm";
-import { useUpdateJobMutation } from "../../../redux/features/job/jobApi";
+import { useUpdateTuitionJobByIdFromAdminMutation } from "../../../redux/features/job/jobApi";
 
 const UpdateJobModal = ({ record }: any) => {
   const [open, setModalOpen] = useState(false);
   const [form] = useForm();
   const [update, { data, isLoading, isSuccess, isError, error }] =
-    useUpdateJobMutation();
+    useUpdateTuitionJobByIdFromAdminMutation();
+
   const onFinish = (values: any) => {
     update({ id: record?._id, body: values });
   };
+
   useEffect(() => {
     if (isSuccess) {
       Swal.fire({
@@ -41,7 +43,7 @@ const UpdateJobModal = ({ record }: any) => {
         type="primary"
         size="medium"
         onClick={() => setModalOpen(true)}
-        className="w-full flex gap-1 justify-center items-center"
+        // className="w-full flex gap-1 justify-center items-center"
       >
         <CiEdit className="size-5 text-white" /> Update
       </Button>

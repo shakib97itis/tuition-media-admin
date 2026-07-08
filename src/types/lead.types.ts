@@ -6,15 +6,16 @@ export type TLead = {
   contact: string;
   details: string;
   lead_source: string;
+  status: string;
   assignedTo: TAdmin;
   referredBy?: TAdmin;
-  status: string;
   convertedBy?: TAdmin;
   followUps: {
-    date: Date;
     note?: string;
     doneBy: TAdmin;
+    createdAt?: string;
+    updatedAt?: string;
   }[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: string;
+  updatedAt?: string;
 };

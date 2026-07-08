@@ -1,50 +1,104 @@
-export type TJob = {
-  lead_from: string;
-  posted_by: string;
-  contact: string;
+import type { TAdmin } from "./admin.types";
+import type { TLead } from "./lead.types";
+import type { TTeacher } from "./teacher.types";
+
+// ==========================================
+// Enums & Literal Types
+// ==========================================
+export type TStudentGender = "male" | "female" | "other";
+export type TTutoringType = "home" | "online" | "batch";
+export type TRateType = "monthly" | "per_class" | "per_week";
+export type TTutorGender = "male" | "female" | "any";
+export type TJobStatus =
+  | "draft"
+  | "open"
+  | "assigned"
+  | "demo"
+  | "follow-up"
+  | "confirmed"
+  | "cancelled";
+
+// ==========================================
+//  Main Tuition Job Interface
+// ==========================================
+export interface ITuitionJob<
+  TLead = string,
+  TPostedBy = string,
+  TAssignedTutor = string | null,
+  TAssignedAdmin = string | null,
+> {
+  _id: string;
+
+  // --- Source & Internal Meta ---
+  lead_from: TLead;
+  posted_by: TPostedBy;
+  assigned_admin?: TAssignedAdmin;
+  assigned_tutor?: TAssignedTutor;
   serial_number?: string;
+  conversion_note?: string;
+
+  // --- Public Posting Data ---
   title: string;
-  student_gender: "male" | "female" | "other";
+  job_description?: string;
 
-  category: "bangla" | "english" | "both";
-  course: string;
-  subjects: string[];
-
+  // --- Student Information ---
+  student_gender: TStudentGender;
   number_of_students: number;
-
-  tutoring_type: "home" | "online" | "batch";
-
+  tutoring_type: TTutoringType;
+  student_education: {
+    category: string;
+    course: string;
+    subjects: string[];
+  };
   location: {
-    address: string;
+    full_address: string;
     country: string;
-    area: string;
     city: string;
+    area: string;
     latitude?: number;
     longitude?: number;
   };
+  contact: string;
+  additional_contact?: string;
 
+  // --- Schedule & Timing ---
   days_per_week: number;
-  preferred_days?: string[];
   preferred_time: string;
 
+  // --- Financial ---
   salary: {
-    min: number;
-    max: number;
-    expected: number;
-    type: "monthly" | "per_class";
+    min?: number;
+    max?: number;
     negotiable: boolean;
+    rate_type: TRateType;
+    actual_salary?: number;
   };
 
-  tutor_gender?: "male" | "female";
-  tutor_qualification?: string;
-  tutor_experience_years?: number;
-
+  // --- Tutor Requirements ---
+  tutor_gender: TTutorGender;
+  tutor_qualification: string[];
   special_requirements?: string;
-  status:
-    | "open"
-    | "assigned"
-    | "cancelled"
-    | "demo"
-    | "follow-up"
-    | "confirmed";
-};
+
+  // --- Overall Job Status ---
+  status: TJobStatus;
+
+  // --- Timestamps ---
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ==========================================
+// Usage Types
+// ==========================================
+
+/**
+ * For list views where data is not populated
+ * (Defaults to string IDs)
+ */
+export type TTuitionJobListItem = ITuitionJob;
+
+/**
+ * For detail views where data is fully populated
+ * (Provides full objects for references)
+ */
+export type TTuitionJobDetail = ITuitionJob<TLead, TAdmin, TTeacher, TAdmin>;

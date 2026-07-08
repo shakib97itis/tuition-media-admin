@@ -33,10 +33,17 @@ const AllLeads = LazyLoad(
 );
 
 // Requirements / Jobs Module
-const Jobs = LazyLoad(lazy(() => import("../pages/Jobs/Jobs")));
-const RunningJobs = LazyLoad(
-  lazy(() => import("../pages/RunningJobs/RunningJobs")),
+const Jobs = LazyLoad(
+  lazy(() => import("../pages/Jobs/AllTuitionJobs/AllTuitionJobs")),
 );
+
+const TuitionJobDetailsPage = LazyLoad(
+  lazy(() => import("../pages/Jobs/TuitionJobDetails/TuitionJobDetails")),
+);
+
+// const RunningJobs = LazyLoad(
+//   lazy(() => import("../pages/RunningJobs/RunningJobs")),
+// );
 
 // Teachers Module
 const AllTeachers = LazyLoad(
@@ -97,20 +104,19 @@ export const superAdminPaths: TPath[] = [
     ],
   },
   {
-    name: "Requirements",
+    name: "Tuition Jobs",
     icon: <ProjectOutlined />,
     children: [
       {
-        name: "Requirements",
+        name: "All Tuition Jobs",
         path: "jobs",
         element: <Jobs />,
       },
-      {
-        name: "Running Jobs",
-        path: "running-jobs",
-        element: <RunningJobs />,
-      },
     ],
+  },
+  {
+    path: "jobs/:jobId",
+    element: <TuitionJobDetailsPage />,
   },
   {
     name: "All Teachers",

@@ -1,130 +1,107 @@
-import { Button, Form, Input, InputNumber, Select } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Divider,
+  Switch,
+} from "antd";
+import type { TTuitionJobDetail } from "../../../types/jobs.types";
 
-type TProp = {
+const JobForm = ({
+  form,
+  loading,
+  onFinish,
+  record,
+}: {
   form: any;
   loading: boolean;
-  onFinish: any;
-  record?: any;
-};
-
-const JobForm = ({ form, loading, onFinish, record }: TProp) => {
+  onFinish: (values: any) => void;
+  record?: Partial<TTuitionJobDetail>;
+}) => {
   return (
     <Form
-      onFinish={onFinish}
       form={form}
+      onFinish={onFinish}
       layout="vertical"
-      initialValues={{
-        ...record,
-      }}
-      className="space-y-5"
+      initialValues={record}
+      className="space-y-4!"
     >
-      {/* ================= BASIC INFO ================= */}
-      <div className="grid grid-cols-2 gap-5">
-        <Form.Item
-          name="title"
-          label="Job Title"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <Input size="large" placeholder="Enter job title" />
-        </Form.Item>
-
+      <Divider titlePlacement="start">Contact Details</Divider>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <Form.Item
           name="contact"
-          label="Contact"
-          className="m-0!"
+          label="Primary Contact"
           rules={[{ required: true }]}
         >
-          <Input size="large" placeholder="Enter lead contact" />
+          <Input size="large" />
+        </Form.Item>
+        <Form.Item name="additional_contact" label="Additional Contact">
+          <Input size="large" />
         </Form.Item>
       </div>
 
-      {/* ================= STUDENT INFO ================= */}
-      <div className="grid grid-cols-2 gap-5">
+      <Divider titlePlacement="start">Basic Information</Divider>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <Form.Item name="title" label="Job Title" rules={[{ required: true }]}>
+          <Input size="large" />
+        </Form.Item>
+        <Form.Item
+          name="status"
+          label="Job Status"
+          rules={[{ required: true }]}
+        >
+          <Select
+            size="large"
+            options={[
+              { value: "draft", label: "Draft" },
+              { value: "open", label: "Open" },
+              { value: "assigned", label: "Assigned" },
+              { value: "demo", label: "Demo" },
+              { value: "follow-up", label: "Follow-up" },
+              { value: "confirmed", label: "Confirmed" },
+              { value: "cancelled", label: "Cancelled" },
+            ]}
+          />
+        </Form.Item>
+      </div>
+      <Form.Item name="job_description" label="Job Description">
+        <Input.TextArea rows={3} />
+      </Form.Item>
+
+      <Divider titlePlacement="start">Student Information</Divider>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <Form.Item
           name="student_gender"
           label="Student Gender"
-          className="m-0!"
           rules={[{ required: true }]}
         >
           <Select
             size="large"
-            placeholder="Select student gender"
             options={[
               { value: "male", label: "Male" },
               { value: "female", label: "Female" },
-            ]}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="tutoring_type"
-          label="Tutoring Type"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <Select
-            size="large"
-            placeholder="Select tutoring type"
-            options={[
-              { value: "home", label: "Home" },
-              { value: "online", label: "Online" },
-              { value: "batch", label: "Batch" },
-            ]}
-          />
-        </Form.Item>
-      </div>
-
-      <div className="grid grid-cols-3 gap-5">
-        <Form.Item
-          name="category"
-          label="Category"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <Select
-            size="large"
-            placeholder="Select student gender"
-            options={[{ value: "bangla", label: "Bangla" }]}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="course"
-          label="Course"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <Select
-            size="large"
-            placeholder="Select Course"
-            options={[
-              { value: "home", label: "Home" },
-              { value: "online", label: "Online" },
-              { value: "batch", label: "Batch" },
+              { value: "other", label: "Other" },
             ]}
           />
         </Form.Item>
         <Form.Item
           name="number_of_students"
-          label="Number of Students"
-          className="m-0!"
+          label="No. of Students"
           rules={[{ required: true }]}
         >
-          <InputNumber
-            min={1}
-            placeholder="Enter number of students"
-            className="w-full!"
-            size="large"
-          />
+          <InputNumber min={1} className="w-full!" size="large" />
         </Form.Item>
       </div>
 
-      <Form.Item name="subjects" label="Subjects" rules={[{ required: true }]}>
+      <Form.Item
+        name="tutoring_type"
+        label="Tutoring Type"
+        rules={[{ required: true }]}
+      >
         <Select
           size="large"
-          mode="multiple"
-          placeholder="Select subjects"
           options={[
             { value: "home", label: "Home" },
             { value: "online", label: "Online" },
@@ -133,227 +110,153 @@ const JobForm = ({ form, loading, onFinish, record }: TProp) => {
         />
       </Form.Item>
 
-      {/* ================= LOCATION ================= */}
-      <div className="grid grid-cols-2 gap-5">
+      {/* Education & Location */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <Form.Item
-          name={["location", "country"]}
-          label="Country"
-          className="m-0!"
+          name={["student_education", "category"]}
+          label="Category"
           rules={[{ required: true }]}
         >
-          <Select
-            placeholder="Select Country"
-            size="large"
-            options={[{ value: "bangladesh", label: "Bangladesh" }]}
-          />
+          <Input size="large" />
         </Form.Item>
-
         <Form.Item
-          name={["location", "city"]}
-          label="City"
-          className="m-0!"
+          name={["student_education", "course"]}
+          label="Course"
           rules={[{ required: true }]}
         >
-          <Select
-            placeholder="Select city"
-            size="large"
-            options={[
-              { value: "dhaka", label: "Dhaka" },
-              { value: "chittagong", label: "Chittagong" },
-              { value: "khulna", label: "Khulna" },
-            ]}
-          />
+          <Input size="large" />
+        </Form.Item>
+        <Form.Item
+          name={["student_education", "subjects"]}
+          label="Subjects"
+          rules={[{ required: true }]}
+        >
+          <Select mode="tags" size="large" />
         </Form.Item>
       </div>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <Form.Item
-          name={["location", "area"]}
-          label="Area"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <Select
-            placeholder="Select area"
-            size="large"
-            options={[
-              { value: "khilgaon", label: "Khilgaon" },
-              { value: "uttara", label: "Uttara" },
-              { value: "mirpur", label: "Mirpur" },
-            ]}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name={["location", "address"]}
+          name={["location", "full_address"]}
           label="Address"
-          className="m-0!"
           rules={[{ required: true }]}
         >
-          <Input size="large" placeholder="Enter address" />
+          <Input size="large" />
         </Form.Item>
+        <div className="grid grid-cols-3 gap-2">
+          <Form.Item
+            name={["location", "country"]}
+            label="Country"
+            rules={[{ required: true }]}
+          >
+            <Input size="small" />
+          </Form.Item>
+          <Form.Item
+            name={["location", "city"]}
+            label="City"
+            rules={[{ required: true }]}
+          >
+            <Input size="small" />
+          </Form.Item>
+          <Form.Item
+            name={["location", "area"]}
+            label="Area"
+            rules={[{ required: true }]}
+          >
+            <Input size="small" />
+          </Form.Item>
+        </div>
       </div>
 
-      {/* ================= SCHEDULE ================= */}
-      <div className="grid grid-cols-3 gap-5">
-        <Form.Item
-          name="days_per_week"
-          label="Days per Week"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <InputNumber min={1} max={7} className="w-full!" size="large" />
-        </Form.Item>
-
-        <Form.Item
-          name="preferred_days"
-          label="Preferred Days"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <Select
-            mode="multiple"
-            size="large"
-            placeholder="Select preferred days"
-            options={[
-              { value: "sunday", label: "Sunday" },
-              { value: "monday", label: "Monday" },
-              { value: "tuesday", label: "Tuesday" },
-              { value: "wednesday", label: "Wednesday" },
-              { value: "thursday", label: "Thursday" },
-              { value: "friday", label: "Friday" },
-              { value: "saturday", label: "Saturday" },
-            ]}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="preferred_time"
-          label="Preferred Time"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <Select
-            size="large"
-            placeholder="Select preferred time"
-            options={[
-              { value: "morning", label: "Morning" },
-              { value: "afternoon", label: "Afternoon" },
-              { value: "evening", label: "Evening" },
-            ]}
-          />
-        </Form.Item>
-      </div>
-
-      {/* ================= SALARY ================= */}
-      <div className="grid grid-cols-3 gap-5">
-        <Form.Item
-          name={["salary", "min"]}
-          label="Min Salary"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <InputNumber min={0} className="w-full!" size="large" />
-        </Form.Item>
-
-        <Form.Item
-          name={["salary", "max"]}
-          label="Max Salary"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <InputNumber min={0} className="w-full!" size="large" />
-        </Form.Item>
-
-        <Form.Item
-          name={["salary", "expected"]}
-          label="Expected Salary"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <InputNumber min={0} className="w-full!" size="large" />
-        </Form.Item>
-      </div>
-
-      <div className="grid grid-cols-2 gap-5">
-        <Form.Item
-          name={["salary", "type"]}
-          label="Salary Type"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <Select
-            size="large"
-            placeholder="Select salary type"
-            options={[
-              { value: "monthly", label: "Monthly" },
-              { value: "per_class", label: "Per Class" },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item
-          name="tutor_experience_years"
-          label="Experience (Years)"
-          className="m-0!"
-          rules={[{ required: true }]}
-        >
-          <InputNumber
-            min={0}
-            placeholder="Enter experience"
-            className="w-full!"
-            size="large"
-          />
-        </Form.Item>
-      </div>
-
-      {/* ================= TUTOR INFO ================= */}
-      <div className="grid grid-cols-2 gap-5">
+      <Divider titlePlacement="start">Tutor Requirements</Divider>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <Form.Item
           name="tutor_gender"
           label="Tutor Gender"
           rules={[{ required: true }]}
-          className="m-0!"
         >
           <Select
             size="large"
-            placeholder="Select tutor gender"
             options={[
               { value: "male", label: "Male" },
               { value: "female", label: "Female" },
+              { value: "any", label: "Any" },
             ]}
           />
         </Form.Item>
-
         <Form.Item
-          rules={[{ required: true }]}
           name="tutor_qualification"
-          label="Tutor Qualification"
-          className="m-0!"
+          label="Qualifications"
+          rules={[{ required: true }]}
         >
-          <Input size="large" placeholder="University / College type" />
+          <Select mode="tags" size="large" />
         </Form.Item>
       </div>
 
-      {/* ================= SPECIAL REQUIREMENTS ================= */}
+      <Divider titlePlacement="start">Schedule & Salary</Divider>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <Form.Item name={["salary", "min"]} label="Min Salary">
+          <InputNumber className="w-full!" size="large" />
+        </Form.Item>
+        <Form.Item name={["salary", "max"]} label="Max Salary">
+          <InputNumber className="w-full!" size="large" />
+        </Form.Item>
+        <Form.Item
+          name={["salary", "rate_type"]}
+          label="Rate Type"
+          rules={[{ required: true }]}
+        >
+          <Select
+            size="large"
+            options={[
+              { value: "monthly", label: "Monthly" },
+              { value: "per_class", label: "Per Class" },
+              { value: "per_week", label: "Per Week" },
+            ]}
+          />
+        </Form.Item>
+        <Form.Item
+          name={["salary", "negotiable"]}
+          label="Negotiable"
+          valuePropName="checked"
+        >
+          <Switch />
+        </Form.Item>
+
+        {/* Only for update job */}
+        {record?._id && (
+          <Form.Item name={["salary", "actual_salary"]} label="Actual Salary">
+            <InputNumber className="w-full!" size="large" />
+          </Form.Item>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <Form.Item
+          name="days_per_week"
+          label="Days per Week"
+          rules={[{ required: true }]}
+        >
+          <InputNumber min={1} max={7} className="w-full!" size="large" />
+        </Form.Item>
+        <Form.Item name="preferred_time" label="Preferred Time">
+          <Input size="large" />
+        </Form.Item>
+      </div>
+
       <Form.Item name="special_requirements" label="Special Requirements">
-        <Input.TextArea rows={3} placeholder="Any special requirements..." />
+        <Input.TextArea rows={3} />
       </Form.Item>
 
-      {/* ================= SUBMIT ================= */}
-      <div className="flex justify-end">
-        <Form.Item className="m-0!">
-          <Button
-            type="primary"
-            size="large"
-            htmlType="submit"
-            loading={loading}
-          >
-            {record && Object.keys(record).length > 0
-              ? "Update Academy"
-              : "Create Academy"}
-          </Button>
-        </Form.Item>
-      </div>
+      <Button
+        type="primary"
+        size="large"
+        htmlType="submit"
+        loading={loading}
+        block
+      >
+        {record?._id ? "Update Job" : "Create Job"}
+      </Button>
     </Form>
   );
 };

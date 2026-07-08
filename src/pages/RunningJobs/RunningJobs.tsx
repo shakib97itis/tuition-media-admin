@@ -1,10 +1,10 @@
 import { Dropdown, Input, Select } from "antd";
 import { useState } from "react";
-import { useGetRunningJobsQuery } from "../../redux/features/job/jobApi";
+import { useGetAllTuitionJobsForAdminQuery } from "../../redux/features/job/jobApi";
 import DataTable from "../../components/common/DataTable";
 import DataPagination from "../../components/common/DataPagination";
 import type { ColumnsType } from "antd/es/table";
-import type { TJob } from "../../types/jobs.types";
+import type { TTuitionJobListItem } from "../../types/jobs.types";
 import moment from "moment";
 import { BsThreeDots } from "react-icons/bs";
 import UpdateJobModal from "../../components/ui/modal/UpdateJobModal";
@@ -15,13 +15,13 @@ const RunningJobs = () => {
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [status, setStatus] = useState<string | undefined>(undefined);
   const [limit, setLimit] = useState(30);
-  const { data, isLoading, isFetching } = useGetRunningJobsQuery({
+  const { data, isLoading, isFetching } = useGetAllTuitionJobsForAdminQuery({
     search,
     page,
     limit,
     status,
   });
-  const columns: ColumnsType<TJob> = [
+  const columns: ColumnsType<TTuitionJobListItem> = [
     {
       width: 50,
       align: "center",
