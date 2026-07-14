@@ -14,9 +14,9 @@ import ViewLeadDetailsModal from "../../../components/ui/modal/ViewLeadDetailsMo
 const AllLeads = () => {
   const { Text } = Typography;
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(30);
   const [search, setSearch] = useState<string | undefined>(undefined);
   const [_, setTimeframe] = useState<string | undefined>(undefined);
-  const [limit, setLimit] = useState(30);
   const [status, setStatus] = useState<string | undefined>(undefined);
 
   const { data, isLoading, isFetching } = useGetAllLeadsQuery({

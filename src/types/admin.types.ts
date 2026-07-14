@@ -12,4 +12,9 @@ export type TAdmin = {
   last_login?: Date;
 };
 
+export type TPopulatedAdmin = Pick<
+  TAdmin,
+  "_id" | "full_name" | "email" | "phone"
+>;
+
 export type TAllAdmins = [TAdmin];

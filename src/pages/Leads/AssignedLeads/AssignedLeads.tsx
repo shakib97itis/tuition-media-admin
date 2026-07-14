@@ -13,10 +13,9 @@ import AssignLeadModal from "../../../components/ui/modal/AssignLeadModal";
 
 const AssignedLeads = () => {
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState<string | undefined>(undefined);
-  const [timeframe, setTimeframe] = useState<string | undefined>(undefined);
-  console.log(timeframe);
   const [limit, setLimit] = useState(30);
+  const [search, setSearch] = useState<string | undefined>(undefined);
+  const [_, setTimeframe] = useState<string | undefined>(undefined);
   const { data, isLoading, isFetching } = useGetAssignedLeadsQuery({
     search,
     page,
