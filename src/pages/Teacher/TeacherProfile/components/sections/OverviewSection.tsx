@@ -1,90 +1,101 @@
 import { Card, Descriptions } from "antd";
 import moment from "moment";
 import type { TTeacher } from "../../../../../types/teacher.types";
-import { formatDate } from "../../TeacherProfile";
+import { formatDate, safeRender } from "../../../../../utils/format";
 
 type OverviewSectionProps = {
   teacher: TTeacher;
 };
 
-const OverviewSection = ({ teacher }: OverviewSectionProps) => (
-  <Card
-    title="Overview & Personal Details"
-    className="shadow-sm border-gray-100"
-  >
-    <div className="space-y-6!">
-      {teacher.about_me && (
+const OverviewSection = ({ teacher }: OverviewSectionProps) => {
+  // Safe handling for Age calculation
+  const getAge = (dob?: string | Date) => {
+    if (!dob) return null;
+    const date = moment(dob);
+    return date.isValid() ? moment().diff(date, "years") : null;
+  };
+
+  const dobDisplay = teacher.date_of_birth
+    ? `${formatDate(teacher.date_of_birth)} - (${getAge(teacher.date_of_birth) ?? 0} years old)`
+    : "N/A";
+
+  return (
+    <Card
+      title="Overview & Personal Details"
+      className="shadow-sm border-gray-100"
+    >
+      <div className="space-y-6!">
         <Card title="About Me" size="small" type="inner">
           <p className="text-gray-600 leading-relaxed m-0 whitespace-pre-line">
-            {teacher.about_me}
+            {safeRender(teacher?.about_me, "No about me content provided")}
           </p>
         </Card>
-      )}
 
-      <Descriptions
-        title="Personal Information"
-        column={{ xs: 1, sm: 2 }}
-        layout="vertical"
-        bordered
-        size="small"
-      >
-        <Descriptions.Item label="Full Name">
-          {teacher.full_name ?? "N/A"}
-        </Descriptions.Item>
+        <Descriptions
+          title="Personal Information"
+          column={{ xs: 1, sm: 2 }}
+          layout="vertical"
+          bordered
+          size="small"
+        >
+          <Descriptions.Item label="Full Name">
+            {safeRender(teacher?.full_name)}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Phone Number">
-          {teacher.phone ?? "N/A"}
-        </Descriptions.Item>
+          <Descriptions.Item label="Phone Number">
+            {safeRender(teacher?.phone)}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Additional Phone Number">
-          {teacher.additional_phone ?? "N/A"}
-        </Descriptions.Item>
+          <Descriptions.Item label="Additional Phone Number">
+            {safeRender(teacher?.additional_phone)}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Email" className="capitalize">
-          {teacher.email ?? "N/A"}
-        </Descriptions.Item>
+          <Descriptions.Item label="Email" className="capitalize">
+            {safeRender(teacher?.email)}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Gender" className="capitalize">
-          {teacher.gender ?? "N/A"}
-        </Descriptions.Item>
+          <Descriptions.Item label="Gender" className="capitalize">
+            {safeRender(teacher?.gender)}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Religion">
-          {teacher.religion ?? "N/A"}
-        </Descriptions.Item>
+          <Descriptions.Item label="Religion">
+            {safeRender(teacher?.religion)}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Date of Birth">
-          {formatDate(teacher.date_of_birth)} - (
-          {moment().diff(moment(teacher.date_of_birth), "years")} years old)
-        </Descriptions.Item>
+          <Descriptions.Item label="Date of Birth">
+            {dobDisplay}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Blood Group">
-          {teacher.blood_group ?? "N/A"}
-        </Descriptions.Item>
+          <Descriptions.Item label="Blood Group">
+            {safeRender(teacher?.blood_group)}
+          </Descriptions.Item>
 
-        <Descriptions.Item label="Marital Status" className="capitalize">
-          {teacher.marital_status ?? "N/A"}
-        </Descriptions.Item>
-        <Descriptions.Item label="Serial Number">
-          {teacher.serial_number ?? "N/A"}
-        </Descriptions.Item>
-      </Descriptions>
+          <Descriptions.Item label="Marital Status" className="capitalize">
+            {safeRender(teacher?.marital_status)}
+          </Descriptions.Item>
 
-      <Descriptions
-        title="Address Details"
-        column={{ xs: 1, sm: 2 }}
-        layout="vertical"
-        bordered
-        size="small"
-      >
-        <Descriptions.Item label="Present Address">
-          {teacher.present_address ?? "N/A"}
-        </Descriptions.Item>
-        <Descriptions.Item label="Permanent Address">
-          {teacher.permanent_address ?? "N/A"}
-        </Descriptions.Item>
-      </Descriptions>
-    </div>
-  </Card>
-);
+          <Descriptions.Item label="Serial Number">
+            {safeRender(teacher?.serial_number)}
+          </Descriptions.Item>
+        </Descriptions>
+
+        <Descriptions
+          title="Address Details"
+          column={{ xs: 1, sm: 2 }}
+          layout="vertical"
+          bordered
+          size="small"
+        >
+          <Descriptions.Item label="Present Address">
+            {safeRender(teacher?.present_address)}
+          </Descriptions.Item>
+          <Descriptions.Item label="Permanent Address">
+            {safeRender(teacher?.permanent_address)}
+          </Descriptions.Item>
+        </Descriptions>
+      </div>
+    </Card>
+  );
+};
 
 export default OverviewSection;

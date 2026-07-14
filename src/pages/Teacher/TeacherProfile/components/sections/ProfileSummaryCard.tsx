@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import type { TTeacher } from "../../../../../types/teacher.types";
+import { safeRender } from "../../../../../utils/format";
 
 type ProfileSummaryCardProps = {
   teacher: TTeacher;
@@ -37,10 +38,10 @@ const ProfileSummaryCard = ({ teacher }: ProfileSummaryCardProps) => {
             />
             <div className="min-w-0 w-full">
               <h2 className="text-lg sm:text-xl font-bold text-gray-800 m-0 truncate">
-                {teacher.full_name ?? "No Name Provided"}
+                {safeRender(teacher.full_name, "No Name Provided")}
               </h2>
               <p className="text-sm text-center text-gray-400 capitalize mb-2 md:mb-3">
-                {teacher.role ?? "Teacher"}
+                {safeRender(teacher.role, "Teacher")}
               </p>
               {/* Status Badges */}
               <div className="flex flex-wrap justify-center gap-1.5">
@@ -75,13 +76,15 @@ const ProfileSummaryCard = ({ teacher }: ProfileSummaryCardProps) => {
             <div className="flex items-center gap-3 min-w-0">
               <MailOutlined className="text-gray-400 shrink-0 text-base" />
               <span className="truncate text-sm w-full" title={teacher.email}>
-                {teacher.email ?? "No email provided"}
+                {safeRender(teacher.email, "No email provided")}
               </span>
             </div>
 
             <div className="flex items-center gap-3 min-w-0">
               <PhoneOutlined className="text-gray-400 shrink-0 text-base" />
-              <span className="text-sm truncate">{teacher.phone ?? "N/A"}</span>
+              <span className="text-sm truncate">
+                {safeRender(teacher.phone)}
+              </span>
             </div>
 
             {teacher.years_of_experience !== undefined && (
@@ -97,7 +100,7 @@ const ProfileSummaryCard = ({ teacher }: ProfileSummaryCardProps) => {
               <div className="flex items-center gap-3 min-w-0">
                 <PhoneOutlined className="text-gray-400 shrink-0 text-base" />
                 <span className="text-sm truncate">
-                  {teacher.additional_phone ?? "N/A"}
+                  {safeRender(teacher.additional_phone)}
                 </span>
               </div>
             )}

@@ -15,6 +15,7 @@ const teacherApi = teacherApiSlice.injectEndpoints({
       }),
       providesTags: ["Teachers"],
     }),
+    
     getTeacher: builder.query<TGlobalResponse<TTeacher>, any>({
       query: (id) => ({
         url: `/teachers/${id}`,
@@ -22,6 +23,7 @@ const teacherApi = teacherApiSlice.injectEndpoints({
       }),
       providesTags: ["Teacher"],
     }),
+    
     updateTeacher: builder.mutation({
       query: ({ id, body }) => ({
         url: `/teachers/${id}`,
