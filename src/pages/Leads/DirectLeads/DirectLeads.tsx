@@ -21,7 +21,6 @@ const DirectLeads = () => {
     page,
     limit,
   });
-  console.log(timeframe);
 
   const columns: ColumnsType<TLead> = [
     {

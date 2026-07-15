@@ -131,7 +131,7 @@ export const superAdminPaths: TPath[] = [
   },
   {
     // Teacher Profile edit
-    path: "teacher/edit/:id",
+    path: "teacher/edit/:teacherId",
     element: <UpdateTeacherProfile />,
   },
 ];

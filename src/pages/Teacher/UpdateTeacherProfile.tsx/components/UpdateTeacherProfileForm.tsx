@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import {
   Form,
@@ -13,6 +12,7 @@ import {
   Space,
   Divider,
   Upload,
+  type FormInstance,
 } from "antd";
 import {
   SaveOutlined,
@@ -33,19 +33,21 @@ const { Option } = Select;
 import type { TTeacher } from "../../../../types/teacher.types";
 
 interface UpdateTeacherProfileFormProps {
-  initialData: TTeacher;
+  initialData: TTeacher | undefined;
   onFinish: (values: any) => void;
   isLoading: boolean;
+  form: FormInstance;
+  onCancel: () => void;
 }
 
 const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
   initialData,
   onFinish,
   isLoading,
+  form,
+  onCancel,
 }) => {
-  const [form] = Form.useForm();
-  const navigate = useNavigate();
-
+  // ! need help.
   useEffect(() => {
     if (initialData) {
       // Map initial data to form field values, converting date strings to dayjs objects
@@ -126,18 +128,6 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
               <Input placeholder="Enter teacher name" />
             </Form.Item>
 
-            {/* <Form.Item
-              name="email"
-              label="Email Address"
-              rules={[{ required: true, type: "email" }]}
-            >
-              <Input
-                placeholder="name@example.com"
-                disabled
-                className="bg-gray-50 cursor-not-allowed text-gray-400"
-              />
-            </Form.Item> */}
-
             <Form.Item
               name="phone"
               label="Primary Contact Number"
@@ -161,12 +151,22 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
               <Radio.Group className="w-full flex gap-3 pt-1">
                 <Radio value="male">Male</Radio>
                 <Radio value="female">Female</Radio>
-                <Radio value="other">Other</Radio>
               </Radio.Group>
             </Form.Item>
 
-            <Form.Item name="religion" label="Religion">
-              <Input placeholder="e.g. Islam" />
+            <Form.Item
+              name="religion"
+              label="Religion"
+              rules={[
+                { required: true, message: "Please select your religion" },
+              ]}
+            >
+              <Select placeholder="Select a religion">
+                <Option value="christianity">Christianity</Option>
+                <Option value="islam">Islam</Option>
+                <Option value="hinduism">Hinduism</Option>
+                <Option value="buddhism">Buddhism</Option>
+              </Select>
             </Form.Item>
 
             <Form.Item name="blood_group" label="Blood Group">
@@ -360,7 +360,7 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
             className="m-0 mb-4 text-xs font-medium text-gray-400 uppercase tracking-wider"
             titlePlacement="start"
           >
-            Geographic Operational Targets
+            Teaching area
           </Divider>
           <div className="grid grid-cols-1 @sm:grid-cols-3 gap-x-4 gap-y-1">
             <Form.Item
@@ -863,7 +863,7 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
         <div className="flex flex-col-reverse @sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200">
           <Button
             size="large"
-            onClick={() => navigate(-1)}
+            onClick={onCancel}
             disabled={isLoading}
             className="w-full @sm:w-auto rounded-lg"
           >

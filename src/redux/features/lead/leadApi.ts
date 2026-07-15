@@ -10,7 +10,12 @@ const leadApi = leadApiSlice.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["NewLeads", "AssignedLeads", "AssignedOwnLeads"],
+      invalidatesTags: [
+        "NewLeads",
+        "AssignedLeads",
+        "AssignedOwnLeads",
+        "AllLeads",
+      ],
     }),
 
     getAllLeads: builder.query<IncomingQueryType<TLead>, any>({
@@ -62,7 +67,7 @@ const leadApi = leadApiSlice.injectEndpoints({
         "AssignedOwnLeads",
       ],
     }),
-    
+
     updateLead: builder.mutation({
       query: ({ id, body }) => ({
         url: `/leads/update/${id}`,

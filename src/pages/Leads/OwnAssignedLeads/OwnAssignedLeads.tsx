@@ -19,8 +19,7 @@ import BlockLeadButton from "../components/BlockLeadButton";
 const OwnAssignedLeads = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState<string | undefined>(undefined);
-  const [timeframe, setTimeframe] = useState<string | undefined>(undefined);
-  console.log(timeframe);
+  const [_, setTimeframe] = useState<string | undefined>(undefined);
   const [limit, setLimit] = useState(30);
   const currentUser = useSelector(selectCurrentUser);
   const { data, isLoading, isFetching } = useGetAssignedOwnLeadsQuery({
@@ -29,8 +28,6 @@ const OwnAssignedLeads = () => {
     page,
     limit,
   });
-
-  console.log(data);
 
   const columns: ColumnsType<TLead> = [
     {

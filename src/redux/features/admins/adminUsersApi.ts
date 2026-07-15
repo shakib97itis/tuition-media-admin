@@ -1,10 +1,10 @@
 import type { IncomingQueryType } from "../../../types/index.types";
-import type { TAdmin, TAllAdmins } from "../../../types/admin.types";
+import type { TAdmin } from "../../../types/admin.types";
 import { adminUsersApiSlice } from "../../api/httpSlice";
 
 const adminUsersApi = adminUsersApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAdminUsers: builder.query<IncomingQueryType<TAllAdmins>, any>({
+    getAdminUsers: builder.query<IncomingQueryType<TAdmin>, any>({
       query: (params) => ({
         url: "/admins",
         method: "GET",

@@ -13,8 +13,6 @@ export default function ViewTeacherDetailsModal({
 }) {
   const [open, setModalOpen] = useState(false);
 
-  console.log("record", record);
-
   return (
     <>
       <Button
