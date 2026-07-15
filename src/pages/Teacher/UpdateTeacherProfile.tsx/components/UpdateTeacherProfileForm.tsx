@@ -1,5 +1,3 @@
-import React, { useEffect } from "react";
-import dayjs from "dayjs";
 import {
   Form,
   Input,
@@ -27,6 +25,15 @@ import {
   BookOutlined,
 } from "@ant-design/icons";
 
+import {
+  COUNTRY_OPTIONS,
+  getCityOptions,
+  getAreaOptions,
+  CATEGORY_OPTIONS,
+  getCourseOptions,
+  getSubjectOptions,
+} from "../../../../utils/formOptions.utils";
+
 const { TextArea } = Input;
 const { Option } = Select;
 
@@ -41,61 +48,16 @@ interface UpdateTeacherProfileFormProps {
 }
 
 const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
-  initialData,
   onFinish,
   isLoading,
   form,
   onCancel,
 }) => {
-  // ! need help.
-  useEffect(() => {
-    if (initialData) {
-      // Map initial data to form field values, converting date strings to dayjs objects
-      form.setFieldsValue({
-        ...initialData,
-        date_of_birth: initialData.date_of_birth
-          ? dayjs(initialData.date_of_birth)
-          : null,
-        // Map dynamic lists such as certifications if they contain files
-        certifications: initialData.certifications?.map((cert) => ({
-          type: cert.type,
-          file: cert.certificate_url
-            ? [
-                {
-                  uid: "-1",
-                  name: "Attached Certificate",
-                  status: "done",
-                  url: cert.certificate_url,
-                },
-              ]
-            : [],
-        })),
-        identification: {
-          ...initialData.identification,
-          front_image: initialData.identification?.front_image
-            ? [
-                {
-                  uid: "-1",
-                  name: "Front Copy",
-                  status: "done",
-                  url: initialData.identification.front_image,
-                },
-              ]
-            : [],
-          back_image: initialData.identification?.back_image
-            ? [
-                {
-                  uid: "-1",
-                  name: "Back Copy",
-                  status: "done",
-                  url: initialData.identification.back_image,
-                },
-              ]
-            : [],
-        },
-      });
-    }
-  }, [initialData, form]);
+  const values = Form.useWatch([], form);
+  const selectedCountry = values?.preferred_teaching_locations?.country;
+  const selectedCity = values?.preferred_teaching_locations?.city;
+  const selectedCategories = values?.preferred_tutoring?.categories ?? [];
+  const selectedCourses = values?.preferred_tutoring?.courses ?? [];
 
   return (
     <Form
@@ -278,39 +240,62 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
           </div>
 
           <div className="grid grid-cols-1 @md:grid-cols-2 gap-x-4 gap-y-1">
+            {/* Categories */}
             <Form.Item
               name={["preferred_tutoring", "categories"]}
               label="Preferred Categories"
             >
               <Select
-                mode="tags"
-                placeholder="Press Enter to tag: School, Language"
+                mode="multiple"
+                showSearch={{ optionFilterProp: "label" }}
+                placeholder="Select Categories"
                 className="w-full"
-                tokenSeparators={[","]}
+                options={CATEGORY_OPTIONS}
+                allowClear
+                onChange={() => {
+                  // Reset dependent fields when categories change
+                  form.setFieldValue(["preferred_tutoring", "courses"], []);
+                  form.setFieldValue(["preferred_tutoring", "subjects"], []);
+                }}
               />
             </Form.Item>
+
+            {/* Courses */}
             <Form.Item
               name={["preferred_tutoring", "courses"]}
               label="Preferred Courses"
             >
               <Select
-                mode="tags"
-                placeholder="Press Enter to tag: HSC, O Levels"
+                mode="multiple"
+                showSearch={{ optionFilterProp: "label" }}
+                placeholder="Select Courses"
                 className="w-full"
-                tokenSeparators={[","]}
+                disabled={selectedCategories.length === 0}
+                options={getCourseOptions(selectedCategories)}
+                allowClear
+                onChange={() => {
+                  // Reset dependent fields when courses change
+                  form.setFieldValue(["preferred_tutoring", "subjects"], []);
+                }}
               />
             </Form.Item>
+
+            {/* Subjects */}
             <Form.Item
               name={["preferred_tutoring", "subjects"]}
               label="Expert Subjects"
             >
               <Select
-                mode="tags"
-                placeholder="Press Enter to tag: Physics, Math"
+                mode="multiple"
+                showSearch={{ optionFilterProp: "label" }}
+                placeholder="Select Subjects"
                 className="w-full"
-                tokenSeparators={[","]}
+                disabled={selectedCourses.length === 0}
+                options={getSubjectOptions(selectedCategories, selectedCourses)}
+                allowClear
               />
             </Form.Item>
+
             <Form.Item
               name={["preferred_tutoring", "tutoring_types"]}
               label="Tutoring Type"
@@ -326,6 +311,7 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
                 <Option value="group-tutoring">Group Tutoring</Option>
               </Select>
             </Form.Item>
+
             <div className="col-span-1 @md:col-span-2">
               <Form.Item
                 name={["tutoring_availability", "days"]}
@@ -367,23 +353,53 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
               name={["preferred_teaching_locations", "country"]}
               label="Country"
             >
-              <Input placeholder="e.g. Bangladesh" />
+              <Select
+                placeholder="Select Country"
+                options={COUNTRY_OPTIONS}
+                allowClear
+                onChange={() => {
+                  // Clear dependent fields
+                  form.setFieldValue(
+                    ["preferred_teaching_locations", "city"],
+                    null,
+                  );
+                  form.setFieldValue(
+                    ["preferred_teaching_locations", "area"],
+                    [],
+                  );
+                }}
+              />
             </Form.Item>
+
             <Form.Item
               name={["preferred_teaching_locations", "city"]}
               label="City"
             >
-              <Input placeholder="e.g. Dhaka" />
+              <Select
+                showSearch={{ optionFilterProp: "label" }}
+                placeholder="Search and select City"
+                options={getCityOptions(selectedCountry)}
+                disabled={!selectedCountry}
+                allowClear
+                onChange={() => {
+                  // Clear dependent field
+                  form.setFieldValue(
+                    ["preferred_teaching_locations", "area"],
+                    [],
+                  );
+                }}
+              />
             </Form.Item>
             <Form.Item
               name={["preferred_teaching_locations", "area"]}
               label="Target Working Areas"
             >
               <Select
-                mode="tags"
-                placeholder="Press Enter to add areas"
-                className="w-full"
-                tokenSeparators={[","]}
+                mode="multiple"
+                placeholder="Select Areas"
+                options={getAreaOptions(selectedCity, selectedCountry)}
+                disabled={!selectedCity}
+                allowClear
               />
             </Form.Item>
           </div>
