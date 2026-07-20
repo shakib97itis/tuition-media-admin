@@ -25,9 +25,7 @@ const NewLeads = LazyLoad(
 const OwnAssignedLeads = LazyLoad(
   lazy(() => import("../pages/Leads/OwnAssignedLeads/OwnAssignedLeads")),
 );
-const AssignedLeads = LazyLoad(
-  lazy(() => import("../pages/Leads/AssignedLeads/AssignedLeads")),
-);
+
 const AllLeads = LazyLoad(
   lazy(() => import("../pages/Leads/AllLeads/AllLeads")),
 );
@@ -40,10 +38,6 @@ const Jobs = LazyLoad(
 const TuitionJobDetailsPage = LazyLoad(
   lazy(() => import("../pages/Jobs/TuitionJobDetails/TuitionJobDetails")),
 );
-
-// const RunningJobs = LazyLoad(
-//   lazy(() => import("../pages/RunningJobs/RunningJobs")),
-// );
 
 // Teachers Module
 const AllTeachers = LazyLoad(
@@ -96,11 +90,6 @@ export const superAdminPaths: TPath[] = [
         path: "my-leads",
         element: <OwnAssignedLeads />,
       },
-      // {
-      //   name: "All Assigned Leads",
-      //   path: "assigned-leads",
-      //   element: <AssignedLeads />,
-      // },
     ],
   },
   {
