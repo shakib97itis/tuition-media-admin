@@ -3,7 +3,6 @@ import type { TPopulatedAdmin } from "./admin.types";
 export type TLeadStatus =
   | "new"
   | "assigned"
-  | "interested"
   | "converted"
   | "canceled"
   | "blocked";

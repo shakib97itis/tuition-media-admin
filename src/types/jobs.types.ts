@@ -19,7 +19,7 @@ export type TJobStatus =
   | "cancelled";
 
 // ==========================================
-//  Main Tuition Job Interface
+// Main Tuition Job Interface (Frontend DTO)
 // ==========================================
 export interface ITuitionJob<
   TLead = string,
@@ -46,8 +46,8 @@ export interface ITuitionJob<
   number_of_students: number;
   tutoring_type: TTutoringType;
   student_education: {
-    category: string;
-    course: string;
+    category: string; // Matched to schema (single string)
+    course: string; // Matched to schema (single string)
     subjects: string[];
   };
   location: {
@@ -90,15 +90,5 @@ export interface ITuitionJob<
 // ==========================================
 // Usage Types
 // ==========================================
-
-/**
- * For list views where data is not populated
- * (Defaults to string IDs)
- */
 export type TTuitionJobListItem = ITuitionJob;
-
-/**
- * For detail views where data is fully populated
- * (Provides full objects for references)
- */
 export type TTuitionJobDetail = ITuitionJob<TLead, TAdmin, TTeacher, TAdmin>;

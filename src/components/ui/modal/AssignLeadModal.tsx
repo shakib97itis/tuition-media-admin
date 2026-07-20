@@ -25,7 +25,7 @@ const AssignLeadModal = ({ record }: { record: any }) => {
     data: admins,
     isLoading: isAdminsLoading,
     isError: isAdminsError,
-  } = useGetAdminUsersQuery({});
+  } = useGetAdminUsersQuery({}); // need to provide search query.
 
   // Synchronize state values cleanly whenever modal switches open or records update
   useEffect(() => {

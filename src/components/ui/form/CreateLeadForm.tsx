@@ -6,6 +6,7 @@ type TProp = {
   onFinish: any;
   record?: any;
 };
+
 const CreateLeadForm = ({ form, loading, onFinish, record }: TProp) => {
   return (
     <Form
@@ -51,7 +52,6 @@ const CreateLeadForm = ({ form, loading, onFinish, record }: TProp) => {
         name="details"
         label="Details"
         initialValue={record?.details}
-        rules={[{ required: true }]}
       >
         <Input.TextArea rows={4} placeholder="Enter a small description" />
       </Form.Item>

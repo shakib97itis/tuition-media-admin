@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Button, Form, type FormInstance, Input } from "antd";
-import type { TLead } from "../../../types/lead.types"; // Adjust the import path if necessary
+import type { TLead } from "../../../types/lead.types";
 
 type TProp = {
   form: FormInstance;
@@ -18,6 +18,7 @@ const UpdateLeadForm = ({ form, loading, onFinish, record }: TProp) => {
         contact: record.contact,
         details: record.details,
         lead_source: record.lead_source,
+        status: record.status,
         newFollowUpNote: "", // Reset follow-up input field for a new note
       });
     } else {
@@ -36,7 +37,7 @@ const UpdateLeadForm = ({ form, loading, onFinish, record }: TProp) => {
         <Form.Item
           name="lead_source"
           label="Lead Source"
-          className="m-0!"
+          className="m-0! col-span-2!"
           rules={[{ required: true, message: "Please enter lead from info" }]}
         >
           <Input size="large" placeholder="Please enter lead from info" />

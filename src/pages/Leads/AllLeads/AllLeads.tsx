@@ -10,6 +10,10 @@ import Paragraph from "antd/es/typography/Paragraph";
 import { BsThreeDots } from "react-icons/bs";
 import moment from "moment";
 import ViewLeadDetailsModal from "../../../components/ui/modal/ViewLeadDetailsModal";
+import UpdateLeadModal from "../../../components/ui/modal/UpdateLeadModal";
+import AssignLeadModal from "../../../components/ui/modal/AssignLeadModal";
+import CancelLeadButton from "../components/CancelLeadButton";
+import BlockLeadButton from "../components/BlockLeadButton";
 
 const AllLeads = () => {
   const { Text } = Typography;
@@ -23,11 +27,12 @@ const AllLeads = () => {
     search,
     page,
     limit,
-    status: status || undefined,
+    status,
   });
 
   const columns: ColumnsType<TLead> = [
     {
+      width: 50,
       align: "center",
       title: "S/N",
       dataIndex: "_id",
@@ -37,8 +42,9 @@ const AllLeads = () => {
       },
     },
     {
+      width: 200,
       align: "center",
-      title: "Created Date",
+      title: "Create Date",
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => (
@@ -48,7 +54,7 @@ const AllLeads = () => {
       ),
     },
     {
-      width: 150,
+      width: 200,
       align: "center",
       title: "Assigned To",
       dataIndex: "assignedTo",
@@ -60,13 +66,38 @@ const AllLeads = () => {
       ),
     },
     {
+      width: 200,
+      align: "center",
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => (
+        <p className="font-medium text-sm leading-5 text-[#151515]">{status}</p>
+      ),
+    },
+    {
+      width: 400,
       align: "center",
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text) => <Paragraph>{text}</Paragraph>,
+      render: (text) => (
+        <Paragraph
+          copyable={{
+            text: async () =>
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve(text);
+                }, 500);
+              }),
+          }}
+        >
+          {text}
+        </Paragraph>
+      ),
     },
     {
+      width: 300,
       align: "center",
       title: "Contact",
       dataIndex: "contact",
@@ -87,6 +118,7 @@ const AllLeads = () => {
       ),
     },
     {
+      width: 500,
       align: "center",
       title: "Details",
       dataIndex: "details",
@@ -98,6 +130,7 @@ const AllLeads = () => {
       ),
     },
     {
+      width: 300,
       align: "center",
       title: "Last follow up note",
       dataIndex: "followUps",
@@ -111,10 +144,11 @@ const AllLeads = () => {
       ),
     },
     {
+      width: 180,
       align: "center",
       title: "Lead Source",
-      dataIndex: "details",
-      key: "details",
+      dataIndex: "lead_source",
+      key: "lead_source",
       render: (text) => (
         <p className="font-medium text-sm leading-5 text-[#151515] capitalize">
           {text}
@@ -133,6 +167,22 @@ const AllLeads = () => {
           {
             key: "1",
             label: <ViewLeadDetailsModal record={record} />,
+          },
+          {
+            key: "2",
+            label: <UpdateLeadModal record={record} />,
+          },
+          {
+            key: "3",
+            label: <AssignLeadModal record={record} />,
+          },
+          {
+            key: "4",
+            label: <CancelLeadButton record={record} />,
+          },
+          {
+            key: "5",
+            label: <BlockLeadButton record={record} />,
           },
         ];
         return (
@@ -155,6 +205,10 @@ const AllLeads = () => {
     } else {
       setSearch(value);
     }
+  };
+
+  const handleStatusChangeFilter = (value: string) => {
+    value === "all" ? setStatus(undefined) : setStatus(value);
   };
 
   return (
@@ -186,13 +240,13 @@ const AllLeads = () => {
             <Select
               className="w-full"
               placeholder="Filter by status"
-              onChange={(value) => setStatus(value)}
+              onChange={handleStatusChangeFilter}
               options={[
-                { label: "All", value: "" },
+                { label: "All", value: "all" },
                 { label: "New", value: "new" },
                 { label: "Assigned", value: "assigned" },
-                { label: "Interested", value: "interested" },
                 { label: "Converted", value: "converted" },
+                { label: "Canceled", value: "canceled" },
                 { label: "Blocked", value: "blocked" },
               ]}
             />

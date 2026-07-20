@@ -1,65 +1,83 @@
 import locationDataRaw from "../constants/bangladesh_tuition_locations.json";
 import educationDataRaw from "../constants/tutoring_category_courses_subjects.json";
 
-// --- Interfaces: Define the "shape" of your JSON data to prevent runtime errors ---
+// --- Interfaces ---
 export interface SelectOption {
   label: string;
   value: string;
 }
+
 export interface CityData {
   name: string;
   areas: string[];
 }
+
 export interface CountryLocationData {
   country: string;
   cities: CityData[];
 }
+
 export interface SubjectData {
   subject_name: string;
 }
+
 export interface CourseData {
   course_name: string;
   subjects: SubjectData[];
 }
+
 export interface EducationCategoryData {
   name: string;
   courses: CourseData[];
 }
+
 export interface EducationJsonStructure {
   data: EducationCategoryData[];
 }
 
-// Type assertion for imported JSON modules
+// Type assertions for imported JSON modules
 const locationData = locationDataRaw as CountryLocationData[];
 const educationCategoryData = (educationDataRaw as EducationJsonStructure).data;
 
+// --- UTILITIES ---
+
+/** Normalizes single strings or arrays into a clean string array */
+const ensureArray = (input?: string | string[] | null): string[] => {
+  if (!input) return [];
+  return Array.isArray(input) ? input : [input];
+};
+
 /**
- * Utility: Standardizes array inputs into consistent label/value objects.
- * Cleans whitespace and removes duplicates automatically.
+ * Standardizes array inputs into consistent label/value objects.
+ * Deduplicates based on the lowercase value to prevent key collisions.
  */
 const toUniqueOptions = (
   values: (string | undefined | null)[],
 ): SelectOption[] => {
-  const cleanValues = values.filter(
-    (val): val is string => typeof val === "string" && val.trim() !== "",
-  );
-  return Array.from(new Set(cleanValues)).map((value) => ({
-    label: value,
-    value: value,
-  }));
+  const map = new Map<string, SelectOption>();
+
+  values.forEach((val) => {
+    if (typeof val === "string" && val.trim() !== "") {
+      const label = val.trim();
+      const value = label.toLowerCase();
+
+      if (!map.has(value)) {
+        map.set(value, { label, value });
+      }
+    }
+  });
+
+  return Array.from(map.values());
 };
 
-/**
- * Utility: Security check to ensure the value selected by the user is actually valid.
- * Useful for validating API payloads before hitting the database.
- */
+/** Validates whether user-selected values exist within available options (case-insensitive). */
 export const areValidOptionValues = (
   values: string[] | undefined,
   options: SelectOption[],
 ): boolean => {
   if (!values?.length) return true;
   const validSet = new Set(options.map((opt) => opt.value));
-  return values.every((val) => validSet.has(val));
+  return values.every((val) => validSet.has(val.toLowerCase()));
 };
 
 // --- LOCATION HELPERS ---
@@ -68,7 +86,6 @@ export const COUNTRY_OPTIONS: SelectOption[] = toUniqueOptions(
   locationData.map((loc) => loc.country),
 );
 
-/** Fetches list of cities based on a specific country. If no country is provided, returns all cities. */
 const getCitiesByCountry = (countryName?: string): CityData[] => {
   const filteredCountries = countryName
     ? locationData.filter(
@@ -81,7 +98,6 @@ const getCitiesByCountry = (countryName?: string): CityData[] => {
 export const getCityOptions = (countryName?: string): SelectOption[] =>
   toUniqueOptions(getCitiesByCountry(countryName).map((city) => city.name));
 
-/** Returns areas for a specific city. Requires city name as context. */
 export const getAreaOptions = (
   cityName?: string,
   countryName?: string,
@@ -99,36 +115,39 @@ export const CATEGORY_OPTIONS: SelectOption[] = toUniqueOptions(
   educationCategoryData.map((cat) => cat.name),
 );
 
-/** Helper to filter the master category list down to selected items only. */
+/** Helper to filter master categories down to selected items */
 const getFilteredCategories = (
-  categoryNames?: string[],
+  categoryNames?: string | string[],
 ): EducationCategoryData[] => {
-  if (!categoryNames?.length) return [];
-  const categorySet = new Set(categoryNames.map((name) => name.toLowerCase()));
+  const names = ensureArray(categoryNames);
+  if (!names.length) return [];
+
+  const categorySet = new Set(names.map((name) => name.toLowerCase()));
   return educationCategoryData.filter((cat) =>
     categorySet.has(cat.name.toLowerCase()),
   );
 };
 
-/** Returns courses linked to the selected category (e.g., "Academic" -> "Class 1-5"). */
 export const getCourseOptions = (
-  selectedCategories?: string[],
+  selectedCategories?: string | string[],
 ): SelectOption[] => {
-  if (!selectedCategories?.length) return [];
-  const courses = getFilteredCategories(selectedCategories).flatMap((cat) =>
+  const categories = getFilteredCategories(selectedCategories);
+  const courses = categories.flatMap((cat) =>
     cat.courses.map((course) => course.course_name),
   );
   return toUniqueOptions(courses);
 };
 
-/** Returns specific subjects based on the selected course list. */
 export const getSubjectOptions = (
-  selectedCategories?: string[],
-  selectedCourses?: string[],
+  selectedCategories?: string | string[],
+  selectedCourses?: string | string[],
 ): SelectOption[] => {
-  if (!selectedCourses?.length) return [];
-  const courseSet = new Set(selectedCourses.map((c) => c.toLowerCase()));
+  const coursesArr = ensureArray(selectedCourses);
+  if (!coursesArr.length) return [];
+
+  const courseSet = new Set(coursesArr.map((c) => c.toLowerCase()));
   const categories = getFilteredCategories(selectedCategories);
+
   const subjects = categories.flatMap((cat) =>
     cat.courses.flatMap((course) =>
       courseSet.has(course.course_name.toLowerCase())
@@ -138,3 +157,59 @@ export const getSubjectOptions = (
   );
   return toUniqueOptions(subjects);
 };
+
+// --- STATIC FORM OPTIONS ---
+
+export const GENDER_OPTIONS: SelectOption[] = toUniqueOptions([
+  "Male",
+  "Female",
+  "Other",
+]);
+
+export const RELIGION_OPTIONS: SelectOption[] = toUniqueOptions([
+  "Islam",
+  "Christianity",
+  "Hinduism",
+  "Buddhism",
+  "Judaism",
+  "Other",
+]);
+
+export const BLOOD_GROUP_OPTIONS: SelectOption[] = toUniqueOptions([
+  "A+",
+  "A-",
+  "B+",
+  "B-",
+  "AB+",
+  "AB-",
+  "O+",
+  "O-",
+]);
+
+export const MARITAL_STATUS_OPTIONS: SelectOption[] = toUniqueOptions([
+  "Single",
+  "Married",
+  "Divorced",
+]);
+
+export const JOB_STATUS_OPTIONS: SelectOption[] = toUniqueOptions([
+  "Draft",
+  "Open",
+  "Assigned",
+  "Demo",
+  "Follow-up",
+  "Confirmed",
+  "Cancelled",
+]);
+
+export const TUTORING_TYPE_OPTIONS: SelectOption[] = toUniqueOptions([
+  "Home",
+  "Online",
+  "Batch",
+]);
+
+export const TUTOR_QUALIFICATION_OPTIONS: SelectOption[] = toUniqueOptions([
+  "Public University",
+  "Professor",
+  "Any",
+]);

@@ -40,7 +40,7 @@ const { Option } = Select;
 import type { TTeacher } from "../../../../types/teacher.types";
 
 interface UpdateTeacherProfileFormProps {
-  initialData: TTeacher | undefined;
+  initialData: Partial<TTeacher> | undefined;
   onFinish: (values: any) => void;
   isLoading: boolean;
   form: FormInstance;
@@ -52,12 +52,27 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
   isLoading,
   form,
   onCancel,
+  initialData,
 }) => {
   const values = Form.useWatch([], form);
-  const selectedCountry = values?.preferred_teaching_locations?.country;
-  const selectedCity = values?.preferred_teaching_locations?.city;
-  const selectedCategories = values?.preferred_tutoring?.categories ?? [];
-  const selectedCourses = values?.preferred_tutoring?.courses ?? [];
+
+  const selectedCategories =
+    values?.preferred_tutoring?.categories ??
+    initialData?.preferred_tutoring?.categories ??
+    [];
+
+  const selectedCourses =
+    values?.preferred_tutoring?.courses ??
+    initialData?.preferred_tutoring?.courses ??
+    [];
+
+  const selectedCountry =
+    values?.preferred_teaching_locations?.country ??
+    initialData?.preferred_teaching_locations?.country;
+
+  const selectedCity =
+    values?.preferred_teaching_locations?.city ??
+    initialData?.preferred_teaching_locations?.city;
 
   return (
     <Form
@@ -253,7 +268,6 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
                 options={CATEGORY_OPTIONS}
                 allowClear
                 onChange={() => {
-                  // Reset dependent fields when categories change
                   form.setFieldValue(["preferred_tutoring", "courses"], []);
                   form.setFieldValue(["preferred_tutoring", "subjects"], []);
                 }}
@@ -274,7 +288,6 @@ const UpdateTeacherProfileForm: React.FC<UpdateTeacherProfileFormProps> = ({
                 options={getCourseOptions(selectedCategories)}
                 allowClear
                 onChange={() => {
-                  // Reset dependent fields when courses change
                   form.setFieldValue(["preferred_tutoring", "subjects"], []);
                 }}
               />

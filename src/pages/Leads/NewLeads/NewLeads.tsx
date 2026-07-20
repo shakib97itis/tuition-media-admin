@@ -11,10 +11,9 @@ import { BsThreeDots } from "react-icons/bs";
 import moment from "moment";
 import UpdateLeadModal from "../../../components/ui/modal/UpdateLeadModal";
 import AssignLeadModal from "../../../components/ui/modal/AssignLeadModal";
-import CancelLeadButton from "../components/CancelLeadButton";
 import ViewLeadDetailsModal from "../../../components/ui/modal/ViewLeadDetailsModal";
+import CancelLeadButton from "../components/CancelLeadButton";
 import BlockLeadButton from "../components/BlockLeadButton";
-import CreateJobModal from "../../../components/ui/modal/CreateJobModal";
 
 const NewLeads = () => {
   const [page, setPage] = useState(1);
@@ -134,14 +133,10 @@ const NewLeads = () => {
           },
           {
             key: "4",
-            label: <CreateJobModal lead={record._id} />,
-          },
-          {
-            key: "5",
             label: <CancelLeadButton record={record} />,
           },
           {
-            key: "6",
+            key: "5",
             label: <BlockLeadButton record={record} />,
           },
         ];

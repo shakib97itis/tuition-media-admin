@@ -114,11 +114,11 @@ const OwnAssignedLeads = () => {
       // width: 200,
       align: "center",
       title: "Lead Source",
-      dataIndex: "details",
-      key: "details",
+      dataIndex: "lead_source",
+      key: "lead_source",
       render: (text) => (
         <p className="font-medium text-sm leading-5 text-[#151515] capitalize">
-          {text}
+          {text ? text : "N/A"}
         </p>
       ),
     },
@@ -141,7 +141,7 @@ const OwnAssignedLeads = () => {
           },
           {
             key: "3",
-            label: <CreateJobModal lead={record._id} />,
+            label: <CreateJobModal record={record} />,
           },
           {
             key: "4",

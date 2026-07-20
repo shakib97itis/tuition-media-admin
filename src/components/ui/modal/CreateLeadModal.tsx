@@ -14,6 +14,7 @@ const CreateLeadModal = () => {
   const onFinish = (values: any) => {
     createLead(values);
   };
+
   useEffect(() => {
     if (isSuccess) {
       Swal.fire({
@@ -36,14 +37,16 @@ const CreateLeadModal = () => {
       });
     }
   }, [data, isSuccess, isError, form, error]);
+
   const onCancel = () => {
     setModalOpen(false);
     form.resetFields();
   };
+
   return (
     <>
       <Button onClick={() => setModalOpen(true)} type="primary" size="large">
-        Add Lead
+        Create Lead
       </Button>
       <Modal
         width={800}

@@ -82,25 +82,25 @@ export const superAdminPaths: TPath[] = [
         element: <DirectLeads />,
       },
       {
+        name: "All Leads",
+        path: "all-leads",
+        element: <AllLeads />,
+      },
+      {
         name: "New Leads",
         path: "new-leads",
         element: <NewLeads />,
       },
       {
-        name: "My Assigned Leads",
+        name: "My Leads",
         path: "my-leads",
         element: <OwnAssignedLeads />,
       },
-      {
-        name: "All Assigned Leads",
-        path: "assigned-leads",
-        element: <AssignedLeads />,
-      },
-      {
-        name: "All Leads",
-        path: "all-leads",
-        element: <AllLeads />,
-      },
+      // {
+      //   name: "All Assigned Leads",
+      //   path: "assigned-leads",
+      //   element: <AssignedLeads />,
+      // },
     ],
   },
   {

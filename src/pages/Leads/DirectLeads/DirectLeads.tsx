@@ -70,7 +70,7 @@ const DirectLeads = () => {
       key: "createdAt",
       render: (text) => (
         <p className="font-medium text-sm leading-5 text-[#151515]">
-          {moment(text).format("ddd, MMM Do YYYY")}
+          {moment(text).format("ddd, MMM DD YYYY")}
         </p>
       ),
     },
